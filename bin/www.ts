@@ -7,8 +7,11 @@
 import app from '../app';
 import debug from 'debug';
 
+import sequelize from '../sequelize/sequelize';
+
 const debugLogger = debug('cts-inventory-server:server');
 import http from 'http';
+import User from "../models/User";
 
 /**
  * Get port from environment and store in Express.
@@ -17,19 +20,21 @@ import http from 'http';
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
+(async () => {
+    sequelize();
+    /**
+     * Create HTTP server.
+     */
 
-const server = http.createServer(app);
+    const server = http.createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+    server.listen(port);
+    server.on('error', onError);
+})();
 
 /**
  * Normalize a port into a number, string, or false.
@@ -77,16 +82,4 @@ function onError(error) {
         default:
             throw error;
     }
-}
-
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
-    const addr = server.address();
-    const bind = typeof addr === 'string'
-        ? 'pipe ' + addr
-        : 'port ' + addr.port;
-    debugLogger('Listening on ' + bind);
 }
