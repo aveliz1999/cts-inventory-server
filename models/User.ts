@@ -7,7 +7,8 @@ import {
     CreatedAt,
     UpdatedAt,
     DefaultScope,
-    Scopes
+    Scopes,
+    Unique
 } from 'sequelize-typescript';
 
 @DefaultScope(() => ({
@@ -25,6 +26,7 @@ import {
 @Table
 export default class User extends Model<User> {
     @AllowNull(false)
+    @Unique
     @Column(DataType.STRING(16))
     username: string;
 
@@ -45,4 +47,11 @@ export default class User extends Model<User> {
     @AllowNull(false)
     @Column(DataType.DATE(3))
     updatedAt: Date;
+}
+
+User.prototype.toJSON = function (): object {
+    const values = Object.assign({}, this.get());
+
+    delete values.password;
+    return values;
 }

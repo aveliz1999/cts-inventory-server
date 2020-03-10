@@ -9,6 +9,7 @@ module.exports = {
                 type: Sequelize.INTEGER.UNSIGNED
             },
             username: {
+                unique: true,
                 allowNull: false,
                 type: Sequelize.STRING(16)
             },
