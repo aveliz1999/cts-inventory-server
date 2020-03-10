@@ -1,5 +1,27 @@
-import {Table, Column, Model, DataType, AllowNull, CreatedAt, UpdatedAt} from 'sequelize-typescript';
+import {
+    Table,
+    Column,
+    Model,
+    DataType,
+    AllowNull,
+    CreatedAt,
+    UpdatedAt,
+    DefaultScope,
+    Scopes
+} from 'sequelize-typescript';
 
+@DefaultScope(() => ({
+    attributes: [
+        'id', 'username', 'name', 'createdAt', 'updatedAt'
+    ]
+}))
+@Scopes(() => ({
+    withPassword: {
+        attributes: [
+            'id', 'username', 'password', 'name', 'createdAt', 'updatedAt'
+        ]
+    }
+}))
 @Table
 export default class User extends Model<User> {
     @AllowNull(false)
