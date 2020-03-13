@@ -14,7 +14,7 @@ const app = express();
 
 const sessionOptions: SessionOptions = {
     cookie: {
-        maxAge: 36,
+        maxAge: 3600000,
         httpOnly: false
     },
     name: 'sessId',
