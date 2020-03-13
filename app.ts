@@ -30,7 +30,10 @@ if (app.get('env') === 'production') {
 }
 app.use(session(sessionOptions));
 
-app.use(logger('dev'));
+const env = process.env.NODE_ENV || 'development';
+if (env === 'development') {
+    app.use(logger('dev'));
+}
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -41,10 +44,9 @@ import usersRoute from './routes/users';
 app.use('/users', usersRoute);
 
 app.use((err, req, res, next) => {
-    if(err instanceof SyntaxError) {
+    if (err instanceof SyntaxError) {
         res.status(400).send({message: err.message});
-    }
-    else{
+    } else {
         console.error(err);
         res.status(500).send({message: 'An error occurred on the server'});
     }
