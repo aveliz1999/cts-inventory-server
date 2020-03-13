@@ -1,0 +1,5 @@
+name: 'setup-config'
+description: 'Sets up the config files'
+runs:
+  using: 'node12'
+  main: 'index.js'
