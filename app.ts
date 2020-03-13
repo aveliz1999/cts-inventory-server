@@ -40,4 +40,14 @@ import usersRoute from './routes/users';
 
 app.use('/users', usersRoute);
 
+app.use((err, req, res, next) => {
+    if(err instanceof SyntaxError) {
+        res.status(400).send({message: err.message});
+    }
+    else{
+        console.error(err);
+        res.status(500).send({message: 'An error occurred on the server'});
+    }
+});
+
 export default app;
