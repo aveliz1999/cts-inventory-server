@@ -134,7 +134,22 @@ describe('Users routes/controllers', function () {
                         password: faker.internet.password(50, false, /[a-zA-Z0-9 `~!@#$%^&*()\-_+=[\]{};:'"<>,./?\\]+/)
                     })).body;
                 assert.exists(user);
+
+                assert.exists(user.id);
+                assert.isNumber(user.id);
+
+                assert.exists(user.username);
+                assert.isString(user.username)
                 assert.equal(username, user.username);
+
+                assert.exists(user.name);
+                assert.isString(user.name);
+
+                assert.exists(user.createdAt);
+                assert.isString(user.createdAt);
+
+                assert.exists(user.updatedAt);
+                assert.isString(user.updatedAt);
             });
 
             it('Registration fails with a duplicate username', async function () {
@@ -251,8 +266,101 @@ describe('Users routes/controllers', function () {
                         password
                     })).body;
                 assert.exists(user);
+
+                assert.exists(user.id);
+                assert.isNumber(user.id);
+
+                assert.exists(user.username);
+                assert.isString(user.username)
                 assert.equal(username, user.username);
+
+                assert.exists(user.name);
+                assert.isString(user.name);
+
+                assert.exists(user.createdAt);
+                assert.isString(user.createdAt);
+
+                assert.exists(user.updatedAt);
+                assert.isString(user.updatedAt);
             });
         })
-    })
+    });
+
+    describe('Get user from ID', function () {
+        it('Fails when not authenticated', async function () {
+            const {message}: { message: string } = (await chai.request(app).get('/users/1')).body;
+            assert.equal(message, "Must be logged in to access this route.");
+        });
+        describe('Authenticated', function () {
+            let agent;
+            let userId;
+            before('Authenticate', async function () {
+                agent = chai.request.agent(app);
+                const username = faker.internet.userName(faker.name.firstName(), faker.name.lastName());
+                const password = faker.internet.password(50, false, /[a-zA-Z0-9 `~!@#$%^&*()\-_+=[\]{};:'"<>,./?\\]+/);
+                const user: User = await User.findOne({
+                    where: {
+                        username
+                    }
+                });
+                if (user) {
+                    await user.destroy();
+                }
+                const {id}: { id: number } = (await agent
+                    .post('/users')
+                    .send({
+                        username,
+                        name: faker.name.findName(faker.name.firstName(), faker.name.lastName()).substring(0, 32),
+                        password
+                    })).body;
+                userId = id;
+                await agent
+                    .post('/users/login')
+                    .send({username, password});
+            });
+
+            describe('ID', function () {
+                it('Fails when ID is not a number', async function () {
+                    const {message}: { message: string } = (await agent.get('/users/a')).body;
+                    assert.equal(message, "child \"id\" fails because [\"id\" must be a number]");
+                });
+                it('Fails when ID is not positive', async function () {
+                    const {message}: { message: string } = (await agent.get('/users/0')).body;
+                    assert.equal(message, "child \"id\" fails because [\"id\" must be a positive number]");
+                });
+                it('Fails when ID is not a number', async function () {
+                    const {message}: { message: string } = (await agent.get('/users/1.1')).body;
+                    assert.equal(message, "child \"id\" fails because [\"id\" must be an integer]");
+                });
+            });
+            describe('Valid data', function () {
+                it('Succeeds with valid data', async function () {
+                    const user: {
+                        id: number,
+                        username: string,
+                        name: string,
+                        updatedAt: Date,
+                        createdAt: Date
+                    } = (await agent.get(`/users/${userId}`)).body;
+
+                    assert.exists(user);
+
+                    assert.exists(user.id);
+                    assert.isNumber(user.id);
+
+                    assert.exists(user.username);
+                    assert.isString(user.username)
+
+                    assert.exists(user.name);
+                    assert.isString(user.name);
+
+                    assert.exists(user.createdAt);
+                    assert.isString(user.createdAt);
+
+                    assert.exists(user.updatedAt);
+                    assert.isString(user.updatedAt);
+                });
+            })
+        })
+    });
 });
