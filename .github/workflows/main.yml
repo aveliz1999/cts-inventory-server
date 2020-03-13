@@ -15,13 +15,9 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - name: Shutdown Ubuntu MySQL (SUDO)
-        run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
-      - uses: mirromutth/mysql-action@v1.1
-        with:
-          mysql database: 'database_test'
-          mysql root password: 'password'
       - uses: zhulik/redis-action@1.1.0
       - uses: './.github/actions/setup-config'
+      - name: Initialize database
+        run: mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS database_test'
       - run: npm ci
       - run: npm test

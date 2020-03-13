@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "prestart": "sequelize-cli db:migrate",
     "start": "ts-node bin/www.ts",
-    "test": "NODE_ENV=test mocha"
+    "pretest": "NODE_ENV=test sequelize-cli db:migrate",
+    "test": "NODE_ENV=test mocha --exit"
   },
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
