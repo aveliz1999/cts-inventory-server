@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "ts-node bin/www.ts"
+    "start": "ts-node bin/www.ts",
+    "test": "NODE_ENV=test mocha"
   },
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -32,6 +33,14 @@
     "typescript": "^3.8.3"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.10",
+    "@types/chai-http": "^4.2.0",
+    "@types/faker": "^4.1.10",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "faker": "^4.1.0",
+    "mocha": "^7.1.0",
     "sequelize-cli": "^5.5.1",
     "ts-node": "^8.6.2"
   }
