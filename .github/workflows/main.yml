@@ -2,9 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - '*'
   pull_request:
-    branches: [ master ]
+    branches:
+      - '*'
 
 jobs:
   test:
@@ -18,6 +20,8 @@ jobs:
       - uses: zhulik/redis-action@1.1.0
       - uses: './.github/actions/setup-config'
       - name: Initialize database
-        run: mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS database_test'
+        run: |
+          sudo service mysql start
+          mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS database_test'
       - run: npm ci
       - run: npm test
