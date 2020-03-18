@@ -17,7 +17,7 @@ jobs:
           node-version: 12
       - uses: zhulik/redis-action@1.1.0
       - uses: './.github/actions/setup-config'
-      - run: service mysql start
+      - run: sudo service mysql start
       - run: service mysql status
       - name: Initialize database
         run: mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS database_test'
