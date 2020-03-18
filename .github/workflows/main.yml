@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, actions-mysql-fix ]
   pull_request:
     branches: [ master ]
 
