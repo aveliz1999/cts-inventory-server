@@ -9,6 +9,7 @@ RESTful back-end for the cts-inventory project. Used to keep track of and update
 * `npm install`
 * Rename or copy all the .json.example files in config/ to just *.json
 * Change the config files to match your environment
+* In order to initialize the admin user during initial installation, run `sequelize-cli db:seed:all`. This will initialize it with username `administrator` and password `password`
 
 ## Usage
 
