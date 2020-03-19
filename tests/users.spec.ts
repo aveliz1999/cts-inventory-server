@@ -124,6 +124,7 @@ describe('Users routes/controllers', function () {
                     id: number,
                     username: string,
                     name: string,
+                    pendingPasswordReset: boolean,
                     updatedAt: Date,
                     createdAt: Date
                 } = (await chai.request(app)
@@ -144,6 +145,9 @@ describe('Users routes/controllers', function () {
 
                 assert.exists(user.name);
                 assert.isString(user.name);
+
+                assert.exists(user.pendingPasswordReset);
+                assert.isBoolean(user.pendingPasswordReset);
 
                 assert.exists(user.createdAt);
                 assert.isString(user.createdAt);
@@ -257,6 +261,7 @@ describe('Users routes/controllers', function () {
                     id: number,
                     username: string,
                     name: string,
+                    pendingPasswordReset: boolean,
                     updatedAt: Date,
                     createdAt: Date
                 } = (await chai.request(app)
@@ -276,6 +281,9 @@ describe('Users routes/controllers', function () {
 
                 assert.exists(user.name);
                 assert.isString(user.name);
+
+                assert.exists(user.pendingPasswordReset);
+                assert.isBoolean(user.pendingPasswordReset);
 
                 assert.exists(user.createdAt);
                 assert.isString(user.createdAt);
@@ -339,6 +347,7 @@ describe('Users routes/controllers', function () {
                         id: number,
                         username: string,
                         name: string,
+                        pendingPasswordReset: boolean,
                         updatedAt: Date,
                         createdAt: Date
                     } = (await agent.get(`/users/${userId}`)).body;
@@ -353,6 +362,9 @@ describe('Users routes/controllers', function () {
 
                     assert.exists(user.name);
                     assert.isString(user.name);
+
+                    assert.exists(user.pendingPasswordReset);
+                    assert.isBoolean(user.pendingPasswordReset);
 
                     assert.exists(user.createdAt);
                     assert.isString(user.createdAt);

@@ -8,18 +8,19 @@ import {
     UpdatedAt,
     DefaultScope,
     Scopes,
-    Unique
+    Unique,
+    Default
 } from 'sequelize-typescript';
 
 @DefaultScope(() => ({
     attributes: [
-        'id', 'username', 'name', 'createdAt', 'updatedAt'
+        'id', 'username', 'name', 'pendingPasswordReset', 'createdAt', 'updatedAt'
     ]
 }))
 @Scopes(() => ({
     withPassword: {
         attributes: [
-            'id', 'username', 'password', 'name', 'createdAt', 'updatedAt'
+            'id', 'username', 'password', 'name', 'pendingPasswordReset', 'createdAt', 'updatedAt'
         ]
     }
 }))
@@ -37,6 +38,11 @@ export default class User extends Model<User> {
     @AllowNull(false)
     @Column(DataType.CHAR(60))
     password: string;
+
+    @AllowNull(false)
+    @Default(true)
+    @Column(DataType.BOOLEAN)
+    pendingPasswordReset: boolean;
 
     @CreatedAt
     @AllowNull(false)
