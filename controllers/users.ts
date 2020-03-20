@@ -58,13 +58,18 @@ export const login = async function (req: Request, res: Response) {
             .min(1)
             .max(50)
             .regex(/[a-zA-Z0-9 `~!@#$%^&*()\-_+=[\]{};:'"<>,./?\\]+/)
-            .required()
+            .required(),
+        newPassword: Joi.string()
+            .min(1)
+            .max(50)
+            .regex(/[a-zA-Z0-9 `~!@#$%^&*()\-_+=[\]{};:'"<>,./?\\]+/)
+            .optional()
     });
 
     try {
-        const {username, password} = await schema.validate(req.body);
+        const {username, password, newPassword}: { username: string, password: string, newPassword: string | undefined } = await schema.validate(req.body);
 
-        const user = await User.scope('withPassword').findOne({
+        const user: User = await User.scope('withPassword').findOne({
             where: {
                 username
             }
@@ -78,9 +83,21 @@ export const login = async function (req: Request, res: Response) {
             return res.status(400).send({message: 'Invalid username or password.'})
         }
 
+        if (newPassword) {
+            await user.update({
+                password: await bcrypt.hash(newPassword, passwordsConfig.saltRounds),
+                pendingPasswordReset: false
+            });
+        }
+
+        if (user.pendingPasswordReset) {
+            return res.status(401).send({message: 'Password must be reset.'});
+        }
+
         req.session.user = user.id;
         return res.status(200).send(user);
     } catch (err) {
+        console.error(err);
         if (err.isJoi) {
             return res.status(400).send({message: (err as ValidationError).message});
         }
