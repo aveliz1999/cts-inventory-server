@@ -97,7 +97,6 @@ export const login = async function (req: Request, res: Response) {
         req.session.user = user.id;
         return res.status(200).send(user);
     } catch (err) {
-        console.error(err);
         if (err.isJoi) {
             return res.status(400).send({message: (err as ValidationError).message});
         }
