@@ -1,0 +1,50 @@
+import {Request, Response} from "express";
+import Joi, {ValidationError} from 'joi';
+import InventoryEntry from "../models/InventoryEntry";
+
+export const createEntry = async function (req: Request, res: Response) {
+    const schema = Joi.object({
+        room: Joi.string()
+            .min(1)
+            .max(16)
+            .required(),
+        number: Joi.number()
+            .integer()
+            .positive()
+            .required(),
+        serial: Joi.string()
+            .min(1)
+            .max(16)
+            .required(),
+        model: Joi.string()
+            .min(1)
+            .max(64)
+            .required(),
+        cpu: Joi.string()
+            .min(1)
+            .max(64)
+            .required(),
+        clockSpeed: Joi.string()
+            .min(1)
+            .max(16)
+            .required(),
+        ram: Joi.string()
+            .min(1)
+            .max(16)
+            .required(),
+    });
+
+    try {
+        const data: { room: string, number: number, serial: string, model: string, cpu: string, clockSpeed: string, ram: string }
+            = await schema.validate(req.body);
+
+        const entry = await InventoryEntry.create(data);
+        return res.status(201).send(entry);
+
+    } catch (err) {
+        if (err.isJoi) {
+            return res.status(400).send({message: (err as ValidationError).message});
+        }
+        return res.status(500).send({message: 'An error has occurred on the server.'})
+    }
+};
