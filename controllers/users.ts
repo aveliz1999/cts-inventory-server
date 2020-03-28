@@ -36,7 +36,8 @@ export const createUser = async function (req: Request, res: Response) {
         const user = await User.create({
             username,
             name,
-            password: await bcrypt.hash(password, passwordsConfig.saltRounds)
+            password: await bcrypt.hash(password, passwordsConfig.saltRounds),
+            pendingPasswordReset: false
         });
 
         return res.status(201).send(user);
