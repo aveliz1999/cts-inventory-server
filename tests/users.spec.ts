@@ -336,7 +336,7 @@ describe('Users routes/controllers', function () {
                     const {message}: { message: string } = (await agent.get('/users/0')).body;
                     assert.equal(message, "child \"id\" fails because [\"id\" must be a positive number]");
                 });
-                it('Fails when ID is not a number', async function () {
+                it('Fails when ID is not an integer', async function () {
                     const {message}: { message: string } = (await agent.get('/users/1.1')).body;
                     assert.equal(message, "child \"id\" fails because [\"id\" must be an integer]");
                 });
