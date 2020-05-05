@@ -17,4 +17,5 @@ before('Database setup', function () {
 describe('Inventory routes/controllers', function () {
     createEntryTest(chai, app);
     getEntryFromIdTest(chai, app);
+    searchTest(chai, app);
 });
