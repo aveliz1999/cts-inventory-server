@@ -322,9 +322,10 @@ describe('Users routes/controllers', function () {
                         password
                     })).body;
                 userId = id;
-                await agent
+                const returnedUser = (await agent
                     .post('/users/login')
-                    .send({username, password});
+                    .send({username, password})).body;
+                assert.equal(returnedUser.username, username);
             });
 
             describe('ID', function () {

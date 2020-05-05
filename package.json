@@ -6,7 +6,7 @@
     "prestart": "sequelize-cli db:migrate",
     "start": "ts-node bin/www.ts",
     "pretest": "NODE_ENV=test sequelize-cli db:migrate",
-    "test": "NODE_ENV=test mocha --exit"
+    "test": "NODE_ENV=test mocha --exit --bail"
   },
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
