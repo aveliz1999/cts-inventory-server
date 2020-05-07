@@ -76,12 +76,12 @@ export const login = async function (req: Request, res: Response) {
             }
         });
         if (!user) {
-            return res.status(400).send({message: 'Invalid username or password.'})
+            return res.status(401).send({message: 'Invalid username or password.'})
         }
 
         const matches = await bcrypt.compare(password, user.password);
         if (!matches) {
-            return res.status(400).send({message: 'Invalid username or password.'})
+            return res.status(401).send({message: 'Invalid username or password.'})
         }
 
         if (newPassword) {
