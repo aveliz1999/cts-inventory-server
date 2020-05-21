@@ -170,9 +170,9 @@ export const search = async function (req: Request, res: Response) {
         const flat = {...input, ...input.search};
         delete flat.search;
         if (!Object.values(flat).length) {
-            return res.status(400).send({
-                message: 'Must provide one or more of the following: [room, number, serial, model, cpu, clockSpeed, ram, after]'
-            });
+            return res.send(await InventoryEntry.findAll({
+                limit: 25
+            }));
         }
 
         const searchQuery = (Object.entries(input.search || []) as [string, { value: string | number, operator: string | undefined }][])
@@ -213,7 +213,7 @@ export const search = async function (req: Request, res: Response) {
                         [Op.or]: searchQuery
                     }
                 },
-                limit: 10
+                limit: 25
             }
         } else {
             query = {
@@ -224,7 +224,7 @@ export const search = async function (req: Request, res: Response) {
                         }
                     }
                 },
-                limit: 10
+                limit: 25
             }
         }
 
