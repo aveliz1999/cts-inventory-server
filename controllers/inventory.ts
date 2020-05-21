@@ -210,7 +210,7 @@ export const search = async function (req: Request, res: Response) {
                         id: {
                             [Op.gt]: input.after || 0
                         },
-                        [Op.or]: searchQuery
+                        [Op.and]: searchQuery
                     }
                 },
                 limit: 25
@@ -218,10 +218,8 @@ export const search = async function (req: Request, res: Response) {
         } else {
             query = {
                 where: {
-                    [Op.and]: {
-                        id: {
-                            [Op.gt]: input.after || 0
-                        }
+                    id: {
+                        [Op.gt]: input.after || 0
                     }
                 },
                 limit: 25
