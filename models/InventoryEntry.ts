@@ -33,11 +33,11 @@ export default class InventoryEntry extends Model<InventoryEntry> {
     cpu: string;
 
     @AllowNull(false)
-    @Column(DataType.STRING(16))
+    @Column(DataType.INTEGER.UNSIGNED)
     clockSpeed: string;
 
     @AllowNull(false)
-    @Column(DataType.STRING(16))
+    @Column(DataType.INTEGER.UNSIGNED)
     ram: string;
 
     @CreatedAt
