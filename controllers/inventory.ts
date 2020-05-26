@@ -1,7 +1,6 @@
 import {Request, Response} from "express";
 import Joi, {ValidationError} from 'joi';
 import InventoryEntry from "../models/InventoryEntry";
-import User from "../models/User";
 import {Op} from 'sequelize';
 
 
@@ -27,13 +26,13 @@ export const createEntry = async function (req: Request, res: Response) {
             .min(1)
             .max(64)
             .required(),
-        clockSpeed: Joi.string()
-            .min(1)
-            .max(16)
+        clockSpeed: Joi.number()
+            .integer()
+            .min(0)
             .required(),
-        ram: Joi.string()
-            .min(1)
-            .max(16)
+        ram: Joi.number()
+            .integer()
+            .min(0)
             .required(),
     });
 
@@ -129,23 +128,29 @@ export const search = async function (req: Request, res: Response) {
                     .optional()
             }).optional(),
             clockSpeed: Joi.object({
-                value: Joi.string()
-                    .min(1)
-                    .max(16)
+                value: Joi.number()
+                    .integer()
+                    .min(0)
                     .required(),
                 operator: Joi.string()
                     .valid('=', '>', '>=', '<', '<=')
                     .optional()
             }).optional(),
             ram: Joi.object({
-                value: Joi.string()
-                    .min(1)
-                    .max(16)
+                value: Joi.number()
+                    .integer()
+                    .min(0)
                     .required(),
                 operator: Joi.string()
                     .valid('=', '>', '>=', '<', '<=')
                     .optional()
             }).optional()
+        }).optional(),
+        sort: Joi.object({
+            key: Joi.string()
+                .valid('room', 'number', 'serial', 'model', 'cpu', 'clockSpeed', 'ram'),
+            direction: Joi.string()
+                .valid('ASC', 'DESC')
         }).optional(),
         after: Joi.number()
             .integer()
@@ -161,14 +166,14 @@ export const search = async function (req: Request, res: Response) {
                 serial: { value: string, operator: string | undefined } | undefined,
                 model: { value: string, operator: string | undefined } | undefined,
                 cpu: { value: string, operator: string | undefined } | undefined,
-                clockSpeed: { value: string, operator: string | undefined } | undefined,
-                ram: { value: string, operator: string | undefined } | undefined
+                clockSpeed: { value: number, operator: string | undefined } | undefined,
+                ram: { value: number, operator: string | undefined } | undefined
             },
+            sort: { key: string, direction: string } | undefined
             after: number | undefined
         } = await schema.validate(req.body);
 
-        const flat = {...input, ...input.search};
-        delete flat.search;
+        const flat = {...input.search, after: input.after};
         if (!Object.values(flat).length) {
             return res.send(await InventoryEntry.findAll({
                 limit: 25
@@ -225,8 +230,25 @@ export const search = async function (req: Request, res: Response) {
                 limit: 25
             }
         }
+        if (input.sort) {
+            query.order = [[input.sort.key, input.sort.direction]]
+        }
 
-        const results = await InventoryEntry.findAll(query);
+        const results = await InventoryEntry.findAll(query).map(x => {
+            if (x.clockSpeed >= 1000) {
+                x.clockSpeed = `${(x.clockSpeed / 1000)} GHz`
+            } else {
+                x.clockSpeed = `${x.clockSpeed} MHz`
+            }
+
+            if (x.ram >= 1000) {
+                x.ram = `${(x.ram / 1000)} GB`
+            } else {
+                x.ram = `${x.ram} MB`
+            }
+
+            return x;
+        });
 
         return res.send(results);
 
