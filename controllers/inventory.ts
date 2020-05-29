@@ -28,11 +28,11 @@ export const createEntry = async function (req: Request, res: Response) {
             .required(),
         clockSpeed: Joi.number()
             .integer()
-            .min(0)
+            .positive()
             .required(),
         ram: Joi.number()
             .integer()
-            .min(0)
+            .positive()
             .required(),
     });
 
@@ -130,7 +130,7 @@ export const search = async function (req: Request, res: Response) {
             clockSpeed: Joi.object({
                 value: Joi.number()
                     .integer()
-                    .min(0)
+                    .positive()
                     .required(),
                 operator: Joi.string()
                     .valid('=', '>', '>=', '<', '<=')
@@ -139,7 +139,7 @@ export const search = async function (req: Request, res: Response) {
             ram: Joi.object({
                 value: Joi.number()
                     .integer()
-                    .min(0)
+                    .positive()
                     .required(),
                 operator: Joi.string()
                     .valid('=', '>', '>=', '<', '<=')
@@ -234,22 +234,7 @@ export const search = async function (req: Request, res: Response) {
             query.order = [[input.sort.key, input.sort.direction]]
         }
 
-        const results = await InventoryEntry.findAll(query).map(x => {
-            if (x.clockSpeed >= 1000) {
-                x.clockSpeed = `${(x.clockSpeed / 1000)} GHz`
-            } else {
-                x.clockSpeed = `${x.clockSpeed} MHz`
-            }
-
-            if (x.ram >= 1000) {
-                x.ram = `${(x.ram / 1000)} GB`
-            } else {
-                x.ram = `${x.ram} MB`
-            }
-
-            return x;
-        });
-
+        const results = await InventoryEntry.findAll(query);
         return res.send(results);
 
     } catch (err) {

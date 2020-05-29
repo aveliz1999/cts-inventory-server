@@ -39,11 +39,6 @@ export default function (chai, app) {
                 assert.equal(returnedUser.username, username);
             });
 
-            it('Fails when not provided any data', async function () {
-                const {message}: { message: string } = (await agent.post('/inventory/search').send({})).body;
-                assert.equal(message, "Must provide one or more of the following: [room, number, serial, model, cpu, clockSpeed, ram, after]");
-            });
-
             describe('After', function () {
                 it('Fails when after is not a number', async function () {
                     const {message}: { message: string } = (await agent.post('/inventory/search').send({after: 'a'})).body;
@@ -434,20 +429,7 @@ export default function (chai, app) {
 
                 describe('Clock Speed', function () {
                     describe('Value', function () {
-                        it('Fails when clockSpeed is not a string', async function () {
-                            const {message}: { message: string } = (await agent
-                                .post('/inventory/search')
-                                .send({
-                                    search: {
-                                        clockSpeed: {
-                                            value: 1
-                                        }
-                                    }
-                                })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"clockSpeed\" fails because [child \"value\" fails because [\"value\" must be a string]]]");
-                        });
-
-                        it('Fails when clockSpeed is empty', async function () {
+                        it('Fails when clockSpeed is not a number', async function () {
                             const {message}: { message: string } = (await agent
                                 .post('/inventory/search')
                                 .send({
@@ -457,20 +439,33 @@ export default function (chai, app) {
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"clockSpeed\" fails because [child \"value\" fails because [\"value\" is not allowed to be empty]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"clockSpeed\" fails because [child \"value\" fails because [\"value\" must be a number]]]");
                         });
 
-                        it('Fails when clockSpeed is longer than 16 characters', async function () {
+                        it('Fails when clockSpeed is not positive', async function () {
                             const {message}: { message: string } = (await agent
                                 .post('/inventory/search')
                                 .send({
                                     search: {
                                         clockSpeed: {
-                                            value: ''.padEnd(17, '0')
+                                            value: 0
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"clockSpeed\" fails because [child \"value\" fails because [\"value\" length must be less than or equal to 16 characters long]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"clockSpeed\" fails because [child \"value\" fails because [\"value\" must be a positive number]]]");
+                        });
+
+                        it('Fails when clockSpeed is not an integer', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        clockSpeed: {
+                                            value: 1.5
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"clockSpeed\" fails because [child \"value\" fails because [\"value\" must be an integer]]]");
                         });
                     });
 
@@ -481,7 +476,7 @@ export default function (chai, app) {
                                 .send({
                                     search: {
                                         clockSpeed: {
-                                            value: '1234',
+                                            value: 1,
                                             operator: 1
                                         }
                                     }
@@ -495,7 +490,7 @@ export default function (chai, app) {
                                 .send({
                                     search: {
                                         clockSpeed: {
-                                            value: '1234',
+                                            value: 1,
                                             operator: "a"
                                         }
                                     }
@@ -507,43 +502,43 @@ export default function (chai, app) {
 
                 describe('RAM', function () {
                     describe('Value', function () {
-                        it('Fails when ram is not a string', async function () {
+                        it('Fails when ram is not a number', async function () {
                             const {message}: { message: string } = (await agent
                                 .post('/inventory/search')
                                 .send({
                                     search: {
                                         ram: {
-                                            value: 1
+                                            value: ''
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"ram\" fails because [child \"value\" fails because [\"value\" must be a string]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"ram\" fails because [child \"value\" fails because [\"value\" must be a number]]]");
                         });
 
-                        it('Fails when ram is empty', async function () {
+                        it('Fails when ram is not positive', async function () {
                             const {message}: { message: string } = (await agent
                                 .post('/inventory/search')
                                 .send({
                                     search: {
                                         ram: {
-                                            value: ""
+                                            value: 0
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"ram\" fails because [child \"value\" fails because [\"value\" is not allowed to be empty]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"ram\" fails because [child \"value\" fails because [\"value\" must be a positive number]]]");
                         });
 
-                        it('Fails when ram is longer than 16 characters', async function () {
+                        it('Fails when ram is not an integer', async function () {
                             const {message}: { message: string } = (await agent
                                 .post('/inventory/search')
                                 .send({
                                     search: {
                                         ram: {
-                                            value: ''.padEnd(17, '0')
+                                            value: 1.5
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"ram\" fails because [child \"value\" fails because [\"value\" length must be less than or equal to 16 characters long]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"ram\" fails because [child \"value\" fails because [\"value\" must be an integer]]]");
                         });
                     });
 
@@ -553,13 +548,13 @@ export default function (chai, app) {
                                 .post('/inventory/search')
                                 .send({
                                     search: {
-                                        clockSpeed: {
-                                            value: '1234',
+                                        ram: {
+                                            value: 1,
                                             operator: 1
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"clockSpeed\" fails because [child \"operator\" fails because [\"operator\" must be a string]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"ram\" fails because [child \"operator\" fails because [\"operator\" must be a string]]]");
                         });
 
                         it('Fails when operator is not an allowed type', async function () {
@@ -567,13 +562,13 @@ export default function (chai, app) {
                                 .post('/inventory/search')
                                 .send({
                                     search: {
-                                        clockSpeed: {
-                                            value: '1234',
+                                        ram: {
+                                            value: 1,
                                             operator: "a"
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"clockSpeed\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"ram\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
                         });
                     });
                 });
@@ -591,8 +586,8 @@ export default function (chai, app) {
                                 serial: `${number}`,
                                 model: `${number}`,
                                 cpu: `${number}`,
-                                clockSpeed: `${number}`,
-                                ram: `${number}`
+                                clockSpeed: number + 1, // clockSpeed can't be 0
+                                ram: number + 1 // ram can't be 0
                             }
                         })
                     );
@@ -1341,12 +1336,15 @@ export default function (chai, app) {
                                     }
                                 }
                             })).body;
+                            console.log(entries[index].clockSpeed);
                             const entry = returnedEntries[0];
+                            assert.exists(entry);
 
                             for (let property of Object.entries(entries[index].dataValues)) {
                                 if (property[1] instanceof Date) {
                                     assert.equal(entry[property[0]], property[1].toISOString());
                                 } else {
+                                    console.log(property[0], property[1], entry)
                                     assert.equal(entry[property[0]], property[1]);
                                 }
                             }

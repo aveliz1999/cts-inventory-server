@@ -274,7 +274,7 @@ export default function (chai, app) {
                     assert.equal(message, "child \"clockSpeed\" fails because [\"clockSpeed\" is required]");
                 });
 
-                it('Fails when clockSpeed is not a string', async function () {
+                it('Fails when clockSpeed is not a number', async function () {
                     const {message}: { message: string } = (await agent
                         .post('/inventory')
                         .send({
@@ -283,12 +283,12 @@ export default function (chai, app) {
                             serial: '1234',
                             model: '1234',
                             cpu: '1234',
-                            clockSpeed: 1
+                            clockSpeed: false
                         })).body;
-                    assert.equal(message, "child \"clockSpeed\" fails because [\"clockSpeed\" must be a string]");
+                    assert.equal(message, "child \"clockSpeed\" fails because [\"clockSpeed\" must be a number]");
                 });
 
-                it('Fails when clockSpeed is empty', async function () {
+                it('Fails when clockSpeed is not positive', async function () {
                     const {message}: { message: string } = (await agent
                         .post('/inventory')
                         .send({
@@ -297,12 +297,12 @@ export default function (chai, app) {
                             serial: '1234',
                             model: '1234',
                             cpu: '1234',
-                            clockSpeed: ''
+                            clockSpeed: 0
                         })).body;
-                    assert.equal(message, "child \"clockSpeed\" fails because [\"clockSpeed\" is not allowed to be empty]");
+                    assert.equal(message, "child \"clockSpeed\" fails because [\"clockSpeed\" must be a positive number]");
                 });
 
-                it('Fails when clockSpeed is longer than 16 characters', async function () {
+                it('Fails when clockSpeed is not an integer', async function () {
                     const {message}: { message: string } = (await agent
                         .post('/inventory')
                         .send({
@@ -311,9 +311,9 @@ export default function (chai, app) {
                             serial: '1234',
                             model: '1234',
                             cpu: '1234',
-                            clockSpeed: ''.padEnd(17, '0')
+                            clockSpeed: 1.5
                         })).body;
-                    assert.equal(message, "child \"clockSpeed\" fails because [\"clockSpeed\" length must be less than or equal to 16 characters long]");
+                    assert.equal(message, "child \"clockSpeed\" fails because [\"clockSpeed\" must be an integer]");
                 });
             });
 
@@ -327,12 +327,12 @@ export default function (chai, app) {
                             serial: '1234',
                             model: '1234',
                             cpu: '1234',
-                            clockSpeed: '1234'
+                            clockSpeed: 1234
                         })).body;
                     assert.equal(message, "child \"ram\" fails because [\"ram\" is required]");
                 });
 
-                it('Fails when ram is not a string', async function () {
+                it('Fails when ram is not a number', async function () {
                     const {message}: { message: string } = (await agent
                         .post('/inventory')
                         .send({
@@ -341,13 +341,13 @@ export default function (chai, app) {
                             serial: '1234',
                             model: '1234',
                             cpu: '1234',
-                            clockSpeed: '1234',
-                            ram: 1
+                            clockSpeed: 1234,
+                            ram: false
                         })).body;
-                    assert.equal(message, "child \"ram\" fails because [\"ram\" must be a string]");
+                    assert.equal(message, "child \"ram\" fails because [\"ram\" must be a number]");
                 });
 
-                it('Fails when ram is empty', async function () {
+                it('Fails when ram is not positive', async function () {
                     const {message}: { message: string } = (await agent
                         .post('/inventory')
                         .send({
@@ -356,13 +356,13 @@ export default function (chai, app) {
                             serial: '1234',
                             model: '1234',
                             cpu: '1234',
-                            clockSpeed: '1234',
-                            ram: ''
+                            clockSpeed: 1234,
+                            ram: 0
                         })).body;
-                    assert.equal(message, "child \"ram\" fails because [\"ram\" is not allowed to be empty]");
+                    assert.equal(message, "child \"ram\" fails because [\"ram\" must be a positive number]");
                 });
 
-                it('Fails when ram is longer than 16 characters', async function () {
+                it('Fails when ram is not an integer', async function () {
                     const {message}: { message: string } = (await agent
                         .post('/inventory')
                         .send({
@@ -371,10 +371,10 @@ export default function (chai, app) {
                             serial: '1234',
                             model: '1234',
                             cpu: '1234',
-                            clockSpeed: '1234',
-                            ram: ''.padEnd(17, '0')
+                            clockSpeed: 1234,
+                            ram: 1.5
                         })).body;
-                    assert.equal(message, "child \"ram\" fails because [\"ram\" length must be less than or equal to 16 characters long]");
+                    assert.equal(message, "child \"ram\" fails because [\"ram\" must be an integer]");
                 });
             });
 
@@ -387,8 +387,8 @@ export default function (chai, app) {
                         serial: string,
                         model: string,
                         cpu: string,
-                        clockSpeed: string,
-                        ram: string,
+                        clockSpeed: number,
+                        ram: number,
                         updatedAt: string,
                         createdAt: string
                     } = (await agent
@@ -399,8 +399,8 @@ export default function (chai, app) {
                                 serial: '1234',
                                 model: '1234',
                                 cpu: '1234',
-                                clockSpeed: '1234',
-                                ram: '1234'
+                                clockSpeed: 1234,
+                                ram: 1234
                             })
                     ).body;
 
@@ -425,10 +425,10 @@ export default function (chai, app) {
                     assert.isString(inventoryEntry.cpu);
 
                     assert.exists(inventoryEntry.clockSpeed);
-                    assert.isString(inventoryEntry.clockSpeed);
+                    assert.isNumber(inventoryEntry.clockSpeed);
 
                     assert.exists(inventoryEntry.ram);
-                    assert.isString(inventoryEntry.ram);
+                    assert.isNumber(inventoryEntry.ram);
 
                     assert.exists(inventoryEntry.createdAt);
                     assert.isString(inventoryEntry.createdAt);

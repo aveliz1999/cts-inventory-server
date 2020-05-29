@@ -61,8 +61,8 @@ export default function (chai, app) {
                             serial: '1234',
                             model: '1234',
                             cpu: '1234',
-                            clockSpeed: '1234',
-                            ram: '1234',
+                            clockSpeed: 1234,
+                            ram: 1234,
                         })).body;
                     entryId = id;
                 });
@@ -75,8 +75,8 @@ export default function (chai, app) {
                         serial: string,
                         model: string,
                         cpu: string,
-                        clockSpeed: string,
-                        ram: string,
+                        clockSpeed: number,
+                        ram: number,
                         updatedAt: string,
                         createdAt: string
                     } = (await agent.get(`/inventory/${entryId}`)).body;
@@ -102,10 +102,10 @@ export default function (chai, app) {
                     assert.isString(inventoryEntry.cpu);
 
                     assert.exists(inventoryEntry.clockSpeed);
-                    assert.isString(inventoryEntry.clockSpeed);
+                    assert.isNumber(inventoryEntry.clockSpeed);
 
                     assert.exists(inventoryEntry.ram);
-                    assert.isString(inventoryEntry.ram);
+                    assert.isNumber(inventoryEntry.ram);
 
                     assert.exists(inventoryEntry.createdAt);
                     assert.isString(inventoryEntry.createdAt);
