@@ -10,7 +10,7 @@ spec:
       image: node:14
       tty: true
     - name: mysql
-      image: mysql:asd
+      image: mysql:8
       tty: true
 """
         }
