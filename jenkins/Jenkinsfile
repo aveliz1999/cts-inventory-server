@@ -9,6 +9,9 @@ spec:
     - name: node
       image: node:14
       tty: true
+    - name: mysql
+      image: mysql:asd
+      tty: true
 """
         }
     }
@@ -17,6 +20,7 @@ spec:
             steps {
                 container('node') {
                     sh 'npm ci'
+                    sh 'node ${WORKSPACE}/jenkins/setupConfigs.js'
                     sh 'npm test'
                 }
             }
