@@ -16,6 +16,7 @@ spec:
         stage('Test') {
             steps {
                 container('node') {
+                    sh 'npm ci'
                     sh 'npm test'
                 }
             }
