@@ -15,7 +15,7 @@ spec:
     stages {
         stage('Test') {
             steps {
-                container('node:14') {
+                container('node') {
                     sh 'npm test'
                 }
             }
