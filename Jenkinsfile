@@ -1,8 +1,8 @@
 pipeline {
     agent any
     stages {
-        container('node:14') {
-            stage('Test') {
+        stage('Test') {
+            container('node:14') {
                 sh 'npm test'
             }
         }
