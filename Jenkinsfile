@@ -25,12 +25,12 @@ spec:
     }
     environment {
         image = 'cts-inventory-server'
+        DOCKER_PATH = tool 'docker'
     }
     stages {
 
         stage('Publish') {
             environment {
-                DOCKER_PATH = tool 'docker'
                 PATH = sh 'echo "${PATH}:$(dirname ${DOCKER_PATH})"'
             }
             steps {
