@@ -27,27 +27,14 @@ spec:
         image = 'cts-inventory-server'
     }
     stages {
-        stage('Test') {
-            steps {
-                container('node') {
-                    sh 'wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh'
-                    sh 'chmod +x wait-for-it.sh'
-                    sh './wait-for-it.sh localhost:3306 -t 120'
-                    sh 'npm ci'
-                    sh 'node ${WORKSPACE}/jenkins/setupConfigs.js'
-                    sh 'npm test'
-                }
-            }
-        }
+
         stage('Publish') {
             environment {
                 DOCKER_PATH = tool 'docker'
-                DOCKER_DIR_PATH = sh 'dirname ${DOCKER_PATH}'
-                PATH = "${PATH}:${DOCKER_DIR_PATH}"
             }
             steps {
                 script {
-                    sh 'echo ${PATH}'
+                    sh 'export PATH="${PATH}:$(dirname ${DOCKER_PATH})"'
                     docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
                         def image = docker.build("${image}:test-${BUILD_NUMBER}")
                         image.push()
