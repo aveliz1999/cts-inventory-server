@@ -13,6 +13,7 @@ spec:
       image: redis:6
     - name: docker
       image: docker:latest
+      tty: true
     - name: mysql
       image: mysql:8
       ports:
