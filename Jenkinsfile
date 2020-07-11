@@ -41,7 +41,7 @@ spec:
         }
         stage('Publish') {
             steps {
-                def dockerPath = tool 'docker'
+                tool 'docker'
                 script {
                     sh 'echo ${PATH}'
                     docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
