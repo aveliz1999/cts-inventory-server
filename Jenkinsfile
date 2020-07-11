@@ -35,6 +35,7 @@ spec:
             steps {
                 script {
                     sh 'export PATH="${PATH}:$(dirname ${DOCKER_PATH})"'
+                    sh 'ECHO $PATH'
                     docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
                         def image = docker.build("${image}:test-${BUILD_NUMBER}")
                         image.push()
