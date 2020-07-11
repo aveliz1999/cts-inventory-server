@@ -27,7 +27,7 @@ spec:
                 container('node') {
                     sh 'wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh'
                     sh 'chmod +x wait-for-it.sh'
-                    sh './wait-for-it.sh localhost:3306 -t 15'
+                    sh './wait-for-it.sh localhost:3306 -t 120'
                     sh 'npm ci'
                     sh 'node ${WORKSPACE}/jenkins/setupConfigs.js'
                     sh 'npm test'
