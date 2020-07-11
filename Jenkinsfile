@@ -11,6 +11,8 @@ spec:
       tty: true
     - name: redis
       image: redis:6
+    - name: docker
+      image: docker:latest
     - name: mysql
       image: mysql:8
       ports:
@@ -41,11 +43,13 @@ spec:
         }
         stage('Publish') {
             steps {
-                script {
-                    docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
-                        def image = docker.build(registry + ":test-$BUILD_NUMBER")
-                        image.push()
-                        image.push('latest')
+                container('docker') {
+                    script {
+                        docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
+                            def image = docker.build(registry + ":test-$BUILD_NUMBER")
+                            image.push()
+                            image.push('latest')
+                        }
                     }
                 }
             }
