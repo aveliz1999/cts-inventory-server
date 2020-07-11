@@ -47,7 +47,7 @@ spec:
                 container('docker') {
                     script {
                         docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
-                            def image = docker.build(registry + ":test-$BUILD_NUMBER")
+                            def image = docker.build(image + ":test-$BUILD_NUMBER")
                             image.push()
                             image.push('latest')
                         }
