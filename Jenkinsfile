@@ -41,6 +41,7 @@ spec:
         }
         stage('Publish') {
             steps {
+                tool 'docker'
                 script {
                     docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
                         def image = docker.build("${image}:test-${BUILD_NUMBER}")
