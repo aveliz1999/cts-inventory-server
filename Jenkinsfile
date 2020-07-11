@@ -41,7 +41,7 @@ spec:
         }
         stage('Publish') {
             environment {
-                PATH = "${PATH}:" + tool 'docker'
+                PATH = "$PATH:" + tool 'docker'
             }
             steps {
                 script {
