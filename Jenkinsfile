@@ -9,6 +9,8 @@ spec:
     - name: node
       image: node:14
       tty: true
+    - name: redis
+      image: redis:6
     - name: mysql
       image: mysql:8
       ports:
