@@ -23,6 +23,9 @@ spec:
 """
         }
     }
+    environment {
+        image = 'cts-inventory-server'
+    }
     stages {
         stage('Test') {
             steps {
@@ -33,6 +36,17 @@ spec:
                     sh 'npm ci'
                     sh 'node ${WORKSPACE}/jenkins/setupConfigs.js'
                     sh 'npm test'
+                }
+            }
+        }
+        stage('Publish') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
+                        def image = docker.build(registry + ":test-$BUILD_NUMBER")
+                        image.push()
+                        image.push('latest')
+                    }
                 }
             }
         }
