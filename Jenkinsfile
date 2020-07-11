@@ -16,16 +16,17 @@ spec:
       env:
         - name: MYSQL_ROOT_PASSWORD
           value: root
+        - name: MYSQL_DATABASE
+          value: database_test
 """
         }
     }
     stages {
         stage('Test') {
             steps {
-                container('mysql') {
-                    sh "mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS database_test'"
-                }
                 container('node') {
+                    sh 'wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh'
+                    sh './wait-for-it localhost:33306 -t 15'
                     sh 'npm ci'
                     sh 'node ${WORKSPACE}/jenkins/setupConfigs.js'
                     sh 'npm test'
