@@ -35,7 +35,7 @@ spec:
             }
             steps {
                 script {
-
+                    sh 'echo ${PATH}'
                     docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
                         def image = docker.build("${image}:test-${BUILD_NUMBER}")
                         image.push()
