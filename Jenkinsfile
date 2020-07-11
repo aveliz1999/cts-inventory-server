@@ -47,7 +47,8 @@ spec:
             steps {
                 script {
                     sh 'echo ${PATH}'
-                    sh 'ls /home/jenkins/agent/tools/org.jenkinsci.plugins.docker.commons.tools.DockerTool'
+                    sh 'alias docker=${DOCKER_PATH}'
+                    sh 'type docker'
                     docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
                         def image = docker.build("${image}:test-${BUILD_NUMBER}")
                         image.push()
