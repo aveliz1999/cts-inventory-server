@@ -22,6 +22,9 @@ spec:
     stages {
         stage('Test') {
             steps {
+                container('mysql') {
+                    sh "mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS database_test'"
+                }
                 container('node') {
                     sh 'npm ci'
                     sh 'node ${WORKSPACE}/jenkins/setupConfigs.js'
