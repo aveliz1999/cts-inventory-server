@@ -41,10 +41,12 @@ spec:
         }
         stage('Publish') {
             environment {
-                PATH = "$PATH:" + tool 'docker'
+                DOCKER_PATH = tool 'docker'
+                PATH = "${PATH}:${DOCKER_PATH}"
             }
             steps {
                 script {
+                    sh 'echo ${DOCKER_PATH}'
                     sh 'echo ${PATH}'
                     sh 'ls /usr/bin'
                     docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
