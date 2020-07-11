@@ -40,8 +40,10 @@ spec:
             }
         }
         stage('Publish') {
+            environment {
+                PATH = "${PATH}:" + tool 'docker'
+            }
             steps {
-                tool 'docker'
                 script {
                     sh 'echo ${PATH}'
                     sh 'ls /usr/bin'
