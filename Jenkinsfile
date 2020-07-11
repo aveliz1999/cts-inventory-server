@@ -45,10 +45,12 @@ spec:
         stage('Publish') {
             steps {
                 container('docker') {
-                    docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
-                        def image = docker.build(registry + ":test-$BUILD_NUMBER")
-                        image.push()
-                        image.push('latest')
+                    script {
+                        docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
+                            def image = docker.build(registry + ":test-$BUILD_NUMBER")
+                            image.push()
+                            image.push('latest')
+                        }
                     }
                 }
             }
