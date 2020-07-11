@@ -42,12 +42,12 @@ spec:
         stage('Publish') {
             environment {
                 DOCKER_PATH = tool 'docker'
-                PATH = "${PATH}:${DOCKER_PATH}"
+                DOCKER_DIR_PATH = sh 'dirname ${DOCKER_PATH}'
+                PATH = "${PATH}:${DOCKER_DIR_PATH}"
             }
             steps {
                 script {
                     sh 'echo ${PATH}'
-                    sh 'alias docker="${DOCKER_PATH}"'
                     docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
                         def image = docker.build("${image}:test-${BUILD_NUMBER}")
                         image.push()
