@@ -15,6 +15,9 @@ spec:
       image: docker:latest
       securityContext:
         privileged: true
+      volumeMounts:
+      - mountPath: /var/run/docker.sock
+        name: docker-socket-volume
       tty: true
     - name: mysql
       image: mysql:8
@@ -25,11 +28,13 @@ spec:
           value: root
         - name: MYSQL_DATABASE
           value: database_test
+    volumes:
+      - name: docker-socket-volume
+        hostPath:
+          path: /var/run/docker.sock
+          type: File
 """
         }
-    }
-    environment {
-        DOCKER_HOST = "tcp://localhost:2375"
     }
     stages {
         stage('Publish') {
