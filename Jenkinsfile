@@ -1,23 +1,40 @@
 pipeline {
-    agent any
-    environment {
-        image = 'cts-inventory-server'
+    agent {
+        kubernetes {
+            yaml """
+apiVersion: v1
+kind: Pod
+spec:
+    containers:
+    - name: node
+      image: node:14
+      tty: true
+    - name: redis
+      image: redis:6
+    - name: mysql
+      image: mysql:8
+      securityContext:
+        privileged: true
+      ports:
+        - containerPort: 3306
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        - name: MYSQL_DATABASE
+          value: database_test
+"""
     }
     stages {
-
         stage('Publish') {
-            environment {
-                DOCKER_PATH = tool 'docker'
-                DOCKER_CREDS = credentials('veliz99-registry-credentials')
-            }
             steps {
-                script {
-                    sh 'chmod -R 777 ${DOCKER_PATH}'
-                    sh 'ls -lsah ${DOCKER_PATH}/docker/docker'
-                    sh 'find ${DOCKER_PATH}'
-                    sh '${DOCKER_PATH}/docker/docker login --username ${DOCKER_CREDS_USR} --password ${DOCKER_CREDS_PSW} https://registry.veliz99.com'
-                    sh '${DOCKER_PATH}/docker/docker build -t ${image}-testing-${BUILD_NUMBER} -t latest .'
-                    sh '${DOCKER_PATH}/docker/docker push https://registry.veliz99.com'
+                container('mysql') {
+                    script {
+                        docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
+                            def image = docker.build("cts-inventory-server:test-${BUILD_NUMBER}")
+                            image.push()
+                            image.push('latest')
+                        }
+                    }
                 }
             }
         }
