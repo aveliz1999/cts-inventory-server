@@ -31,7 +31,7 @@ spec:
     stages {
         stage('Publish') {
             steps {
-                container('mysql') {
+                container('docker') {
                     script {
                         docker.withRegistry('https://registry.veliz99.com', 'veliz99-registry-credentials') {
                             def image = docker.build("cts-inventory-server:test-${BUILD_NUMBER}")
