@@ -29,7 +29,7 @@ spec:
         }
     }
     environment {
-        DOCKER_HOST: "tcp://localhost:2375"
+        DOCKER_HOST = "tcp://localhost:2375"
     }
     stages {
         stage('Publish') {
