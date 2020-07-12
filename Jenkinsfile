@@ -11,10 +11,13 @@ spec:
       tty: true
     - name: redis
       image: redis:6
-    - name: mysql
-      image: mysql:8
+    - name: docker
+      image: docker:latest
       securityContext:
         privileged: true
+      tty: true
+    - name: mysql
+      image: mysql:8
       ports:
         - containerPort: 3306
       env:
