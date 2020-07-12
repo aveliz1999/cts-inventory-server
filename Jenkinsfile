@@ -23,6 +23,7 @@ spec:
         - name: MYSQL_DATABASE
           value: database_test
 """
+        }
     }
     stages {
         stage('Publish') {
