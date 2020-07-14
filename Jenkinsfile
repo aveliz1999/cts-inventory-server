@@ -86,7 +86,7 @@ spec:
                         // Create a ConfigMap for the server configurations for this branch if one doesn't exist already
                         sh './kubectl get ConfigMap cts-inventory-${BRANCH_NAME}-server -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-server/g; s/REPLACEME_ENVIRONMENT/${BRANCH_NAME}/g; s/REPLACEME_PASSWORD/$(kubectl get secret cts-inventory-${BRANCH_NAME}-database -n cts-inventory --template={{.data.password}})/g; s/REPLACEME_SESSION_PASSWORD/$(kubectl get secret cts-inventory-${BRANCH_NAME}-database -n cts-inventory --template={{.data.password}})/g" ./jenkins/configMap.yaml | ./kubectl apply -f -'
 
-                        sh './kubectl set image deployment cts-inventory-${BRANCH_NAME}-server registry.veliz99.com/cts-inventory-server:${BRANCH_NAME}-${BUILD_NUMBER} -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-server/g; s/REPLACEME_IMAGE/registry.veliz99.com\\/cts-inventory-server:${BRANCH_NAME}-${BUILD_NUMBER}/g; s/REPLACEME_ENVIRONMENT/${BRANCH_NAME}/g; s/REPLACEME_CONFIG/cts-inventory-${BRANCH_NAME}-server/g" ./deployment.yaml | ./kubectl apply -f -'
+                        sh './kubectl set image deployment cts-inventory-${BRANCH_NAME}-server registry.veliz99.com/cts-inventory-server:${BRANCH_NAME}-${BUILD_NUMBER} -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-server/g; s/REPLACEME_IMAGE/registry.veliz99.com\\/cts-inventory-server:${BRANCH_NAME}-${BUILD_NUMBER}/g; s/REPLACEME_ENVIRONMENT/${BRANCH_NAME}/g; s/REPLACEME_CONFIG/cts-inventory-${BRANCH_NAME}-server/g" ./jenkins/deployment.yaml | ./kubectl apply -f -'
                     }
                 }
             }
