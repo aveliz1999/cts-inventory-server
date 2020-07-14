@@ -64,7 +64,8 @@ spec:
         }
         stage('Deploy') {
             steps {
-                sh 'curl -LO https://storage.googleapis.com/kubernetes-release/release/1.18.5/bin/linux/amd64/kubectl'
+                sh 'curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.5/bin/linux/amd64/kubectl'
+
                 sh 'chmod +x ./kubectl'
                 withKubeConfig([credentialsId: 'kubernetes-service-account']) {
                     script {
