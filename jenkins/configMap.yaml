@@ -10,7 +10,7 @@ data:
         "username": "cts",
         "password": "REPLACEME_PASSWORD",
         "database": "REPLACEME_ENVIRONMENT",
-        "host": "REPLACEME_HOST",
+        "host": "REPLACEME_HOST_DATABASE",
         "dialect": "mysql",
         "operatorsAliases": false
     }
@@ -29,7 +29,7 @@ data:
   redis.json: |
     {
       "REPLACEME_ENVIRONMENT": {
-        "host": "REPLACEME_HOST",
+        "host": "REPLACEME_HOST_REDIS",
         "port": 6379,
         "db": 0
       }

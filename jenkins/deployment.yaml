@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: REPLACED_NAME
+  name: REPLACEME_NAME
   namespace: cts-inventory
   labels:
-    app: REPLACED_NAME
+    app: REPLACEME_NAME
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: REPLACED_NAME
+      app: REPLACEME_NAME
   template:
     metadata:
       labels:
-        app: REPLACED_NAME
+        app: REPLACEME_NAME
     spec:
       containers:
-        - name: REPLACED_NAME
+        - name: REPLACEME_NAME
           image: REPLACEME_IMAGE
           ports:
             - containerPort: 3000
