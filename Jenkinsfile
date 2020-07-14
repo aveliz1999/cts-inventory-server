@@ -82,11 +82,13 @@ spec:
                         sh './kubectl get PersistentVolumeClaim cts-inventory-${BRANCH_NAME}-database -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-redis/g" ./jenkins/claim.yaml | ./kubectl apply -f -'
                         // Create a redis deployment for this branch if it doesn't exist already
                         sh './kubectl get Deployment cts-inventory-${BRANCH_NAME}-redis -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-redis/g" ./jenkins/redis.yaml | ./kubectl apply -f -'
+                        // Expose the redis deployment for this branch if it isn't already
+                        sh './kubectl get Service cts-inventory-${BRANCH_NAME}-redis -n cts-inventory || ./kubectl expose deployment cts-inventory-${BRANCH_NAME}-redis -n cts-inventory'
 
                         // Create a ConfigMap for the server configurations for this branch if one doesn't exist already
                         sh './kubectl get ConfigMap cts-inventory-${BRANCH_NAME}-server -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-server/g; s/REPLACEME_ENVIRONMENT/${BRANCH_NAME}/g; s/REPLACEME_PASSWORD/$(kubectl get secret cts-inventory-${BRANCH_NAME}-database -n cts-inventory --template={{.data.password}})/g; s/REPLACEME_SESSION_PASSWORD/$(kubectl get secret cts-inventory-${BRANCH_NAME}-database -n cts-inventory --template={{.data.password}})/g" ./jenkins/configMap.yaml | ./kubectl apply -f -'
 
-                        sh './kubectl set image deployment cts-inventory-${BRANCH_NAME}-server registry.veliz99.com/cts-inventory-server:${BRANCH_NAME}-${BUILD_NUMBER} -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-server/g; s/REPLACEME_IMAGE/registry.veliz99.com\\/cts-inventory-server:${BRANCH_NAME}-${BUILD_NUMBER}/g; s/REPLACEME_ENVIRONMENT/${BRANCH_NAME}/g; s/REPLACEME_CONFIG/cts-inventory-${BRANCH_NAME}-server/g" ./jenkins/deployment.yaml | ./kubectl apply -f -'
+                        sh './kubectl set image deployment cts-inventory-${BRANCH_NAME}-server registry.veliz99.com/cts-inventory-server:${BRANCH_NAME}-${BUILD_NUMBER} -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-server/g; s/REPLACEME_IMAGE/registry.veliz99.com\\/cts-inventory-server:${BRANCH_NAME}-${BUILD_NUMBER}/g; s/REPLACEME_ENVIRONMENT/${BRANCH_NAME}/g; s/REPLACEME_CONFIG/cts-inventory-${BRANCH_NAME}-server/g; s/REPLACEME_HOST_DATABASE/cts-inventory-${BRANCH_NAME}-database/g; s/REPLACEME_HOST_REDIS/cts-inventory-${BRANCH_NAME}-redis/g" ./jenkins/deployment.yaml | ./kubectl apply -f -'
                     }
                 }
             }
