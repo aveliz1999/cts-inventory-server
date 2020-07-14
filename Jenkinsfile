@@ -79,7 +79,7 @@ spec:
                         sh './kubectl get Service cts-inventory-${BRANCH_NAME}-database -n cts-inventory || ./kubectl expose deployment cts-inventory-${BRANCH_NAME}-database -n cts-inventory'
 
                         // Create a redis deployment for this branch if it doesn't exist already
-                        sh './kubectl get Deployment cts-inventory-${BRANCH_NAME}-redis -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-redis" ./jenkins/redis.yaml | ./kubectl apply -f -'
+                        sh './kubectl get Deployment cts-inventory-${BRANCH_NAME}-redis -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-redis/g" ./jenkins/redis.yaml | ./kubectl apply -f -'
 
                         // Create a ConfigMap for the server configurations for this branch if one doesn't exist already
                         sh './kubectl get ConfigMap cts-inventory-${BRANCH_NAME}-server -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-server/g; s/REPLACEME_ENVIRONMENT/${BRANCH_NAME}/g; s/REPLACEME_PASSWORD/$(kubectl get secret cts-inventory-${BRANCH_NAME}-database -n cts-inventory --template={{.data.password}})/g; s/REPLACEME_SESSION_PASSWORD/$(kubectl get secret cts-inventory-${BRANCH_NAME}-database -n cts-inventory --template={{.data.password}})/g" ./jenkins/configMap.yaml | ./kubectl apply -f -'
