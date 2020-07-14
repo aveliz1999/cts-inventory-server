@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: REPLACED_NAME
+  namespace: cts-inventory
+  labels:
+    app: REPLACED_NAME
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: REPLACED_NAME
+  template:
+    metadata:
+      labels:
+        app: REPLACED_NAME
+    spec:
+      containers:
+        - name: REPLACED_NAME
+          image: REPLACEME_IMAGE
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "REPLACEME_ENVIRONMENT"
+          volumeMounts:
+            - name: config
+              mountPath: /app/config/
+      volumes:
+        - name: config
+          configMap:
+            name: REPLACEME_CONFIG
