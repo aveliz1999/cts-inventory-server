@@ -79,7 +79,7 @@ spec:
                         sh './kubectl get Service cts-inventory-${BRANCH_NAME}-database -n cts-inventory || ./kubectl expose deployment cts-inventory-${BRANCH_NAME}-database -n cts-inventory'
 
                         // Create a persistent volume claim for redis if one doesn't exist for this branch
-                        sh './kubectl get PersistentVolumeClaim cts-inventory-${BRANCH_NAME}-database -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-redis/g" ./jenkins/claim.yaml | ./kubectl apply -f -'
+                        sh './kubectl get PersistentVolumeClaim cts-inventory-${BRANCH_NAME}-redis -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-redis/g" ./jenkins/claim.yaml | ./kubectl apply -f -'
                         // Create a redis deployment for this branch if it doesn't exist already
                         sh './kubectl get Deployment cts-inventory-${BRANCH_NAME}-redis -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-redis/g" ./jenkins/redis.yaml | ./kubectl apply -f -'
                         // Expose the redis deployment for this branch if it isn't already
