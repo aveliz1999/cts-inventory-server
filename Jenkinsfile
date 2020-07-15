@@ -93,7 +93,7 @@ spec:
                         // Expose the server deployment for this branch if it isn't already
                         sh './kubectl get Service cts-inventory-${BRANCH_NAME}-server -n cts-inventory || ./kubectl expose deployment cts-inventory-${BRANCH_NAME}-server -n cts-inventory'
                         // Expose an ingress for this branch if it doesn't have on already
-                        sh './kubectl get ingress cts-inventory-${BRANCH_NAME} -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}/g; s/REPLACEME_HOST/${BRANCH_NAME}.cts-inventory.${DOMAIN}/g; s/REPLACEME_SERVICE/cts-inventory-${BRANCH_NAME}-server/g" ./jenkins/ingress.yaml | kubectl apply -f -'
+                        sh './kubectl get ingress cts-inventory-${BRANCH_NAME} -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}/g; s/REPLACEME_HOST/${BRANCH_NAME}.cts-inventory.${DOMAIN}/g; s/REPLACEME_SERVICE/cts-inventory-${BRANCH_NAME}-server/g" ./jenkins/ingress.yaml | ./kubectl apply -f -'
                     }
                 }
             }
