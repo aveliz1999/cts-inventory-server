@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: cts-inventory
+  name: REPLACEME_NAME
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+    nginx.ingress.kubernetes.io/proxy-body-size:  "50m"
+spec:
+  tls:
+    - hosts:
+        - "REPLACEME_HOST"
+      secretName: "REPLACEME_NAME"
+  rules:
+    - host: "REPLACEME_HOST"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: "REPLACEME_SERVICE"
+              servicePort: 3000
