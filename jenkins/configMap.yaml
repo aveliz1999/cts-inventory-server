@@ -9,7 +9,7 @@ data:
       "REPLACEME_ENVIRONMENT": {
         "username": "root",
         "password": "REPLACEME_PASSWORD",
-        "database": "REPLACEME_ENVIRONMENT",
+        "database": "cts",
         "host": "REPLACEME_HOST_DATABASE",
         "dialect": "mysql",
         "operatorsAliases": false
