@@ -6,23 +6,18 @@ metadata:
 data:
   database.json: |
     {
-        "REPLACEME_ENVIRONMENT": {
+      "REPLACEME_ENVIRONMENT": {
         "username": "cts",
         "password": "REPLACEME_PASSWORD",
         "database": "REPLACEME_ENVIRONMENT",
         "host": "REPLACEME_HOST_DATABASE",
         "dialect": "mysql",
         "operatorsAliases": false
+      }
     }
   passwords.json: |
     {
-      "development": {
-        "saltRounds": 12
-      },
-      "test": {
-        "saltRounds": 12
-      },
-      "production": {
+      "REPLACEME_ENVIRONMENT": {
         "saltRounds": 12
       }
     }
