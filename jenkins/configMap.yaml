@@ -7,7 +7,7 @@ data:
   database.json: |
     {
       "REPLACEME_ENVIRONMENT": {
-        "username": "cts",
+        "username": "root",
         "password": "REPLACEME_PASSWORD",
         "database": "REPLACEME_ENVIRONMENT",
         "host": "REPLACEME_HOST_DATABASE",
