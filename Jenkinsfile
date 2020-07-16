@@ -72,7 +72,7 @@ spec:
                         // Create a persistent volume claim for the database if one doesn't exist for this branch
                         sh './kubectl get PersistentVolumeClaim cts-inventory-${BRANCH_NAME}-database -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-database/g" ./jenkins/claim.yaml | ./kubectl apply -f -'
                         // Create a database password secret if one doesn't exist for this branch
-                        sh './kubectl get Secret cts-inventory-${BRANCH_NAME}-database -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-database/g; s/REPLACEME_PASSWORD/$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo "")/g" ./jenkins/secret.yaml | ./kubectl apply -f -'
+                        sh './kubectl get Secret cts-inventory-${BRANCH_NAME}-database -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-database/g; s/REPLACEME_PASSWORD/$((head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo "") | base64)/g" ./jenkins/secret.yaml | ./kubectl apply -f -'
                         // Create a database deployment if one doesn't exist for this branch
                         sh './kubectl get Deployment cts-inventory-${BRANCH_NAME}-database -n cts-inventory || sed "s/REPLACEME_NAME/cts-inventory-${BRANCH_NAME}-database/g" ./jenkins/database.yaml | ./kubectl apply -f -'
                         // Expose the database deployment for this branch if it isn't already

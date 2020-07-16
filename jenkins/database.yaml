@@ -27,6 +27,8 @@ spec:
                 secretKeyRef:
                   name: REPLACEME_NAME
                   key: password
+            - name: MYSQL_DATABASE
+              value: cts
           volumeMounts:
             - name: storage
               mountPath: /var/lib/mysql
