@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import User from '../models/User';
 import Joi, {ValidationError} from 'joi';
 import bcrypt from 'bcrypt';
-import {passwords as passwordsConfig} from '../config';
+import {passwords as passwordsConfig} from '../config/index';
 
 export const createUser = async function (req: Request, res: Response) {
     const schema = Joi.object({
