@@ -25,7 +25,17 @@ spec:
               value: "REPLACEME_ENVIRONMENT"
           volumeMounts:
             - name: config
-              mountPath: /app/config/
+              mountPath: /app/config/database.json
+              subPath: database.json
+            - name: config
+              mountPath: /app/config/passwords.json
+              subPath: passwords.json
+            - name: config
+              mountPath: /app/config/redis.json
+              subPath: redis.json
+            - name: config
+              mountPath: /app/config/session.json
+              subPath: session.json
       volumes:
         - name: config
           configMap:
