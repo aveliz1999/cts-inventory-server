@@ -4,4 +4,4 @@ COPY . .
 RUN npm ci
 RUN npm install -g typescript
 RUN tsc --traceResolution
-CMD npm start
+CMD sh
