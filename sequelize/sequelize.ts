@@ -1,5 +1,5 @@
 import {Sequelize} from 'sequelize-typescript';
-import {database} from "../config";
+import {database} from "../config/index";
 import User from "../models/User";
 import InventoryEntry from "../models/InventoryEntry";
 

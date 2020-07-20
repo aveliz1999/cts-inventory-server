@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: cts-inventory
+  name: REPLACEME_NAME
+  labels:
+    app: REPLACEME_NAME
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: REPLACEME_NAME
+  template:
+    metadata:
+      labels:
+        app: REPLACEME_NAME
+    spec:
+      containers:
+        - name: REPLACEME_NAME
+          image: redis:6.0.5
+          args:
+            - '--appendonly'
+            - 'yes'
+            - '--save'
+            - '120'
+            - '1'
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: storage
+              mountPath: /data
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: REPLACEME_NAME
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534

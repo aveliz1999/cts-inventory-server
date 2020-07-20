@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import session, {SessionOptions} from 'express-session';
 import redis from 'redis';
-import {session as sessionConfig, redis as redisConfig} from './config';
+import {session as sessionConfig, redis as redisConfig} from './config/index';
 import connectRedis from 'connect-redis';
 
 const RedisStore = connectRedis(session);

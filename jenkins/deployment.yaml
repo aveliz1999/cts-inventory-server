@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: REPLACEME_NAME
+  namespace: cts-inventory
+  labels:
+    app: REPLACEME_NAME
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: REPLACEME_NAME
+  template:
+    metadata:
+      labels:
+        app: REPLACEME_NAME
+    spec:
+      containers:
+        - name: REPLACEME_NAME
+          image: REPLACEME_IMAGE
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "REPLACEME_ENVIRONMENT"
+          volumeMounts:
+            - name: config
+              mountPath: /app/config/database.json
+              subPath: database.json
+            - name: config
+              mountPath: /app/config/passwords.json
+              subPath: passwords.json
+            - name: config
+              mountPath: /app/config/redis.json
+              subPath: redis.json
+            - name: config
+              mountPath: /app/config/session.json
+              subPath: session.json
+      volumes:
+        - name: config
+          configMap:
+            name: REPLACEME_CONFIG
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534

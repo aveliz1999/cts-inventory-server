@@ -1,0 +1,37 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: REPLACEME_NAME
+  namespace: cts-inventory
+data:
+  database.json: |
+    {
+      "REPLACEME_ENVIRONMENT": {
+        "username": "root",
+        "password": "REPLACEME_PASSWORD",
+        "database": "cts",
+        "host": "REPLACEME_HOST_DATABASE",
+        "dialect": "mysql",
+        "operatorsAliases": false
+      }
+    }
+  passwords.json: |
+    {
+      "REPLACEME_ENVIRONMENT": {
+        "saltRounds": 12
+      }
+    }
+  redis.json: |
+    {
+      "REPLACEME_ENVIRONMENT": {
+        "host": "REPLACEME_HOST_REDIS",
+        "port": 6379,
+        "db": 0
+      }
+    }
+  session.json: |
+    {
+      "REPLACEME_ENVIRONMENT": {
+        "sessionSecrets": ["REPLACEME_SESSION_PASSWORD"]
+      }
+    }
