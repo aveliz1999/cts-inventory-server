@@ -16,7 +16,7 @@ spec:
     - host: "REPLACEME_HOST"
       http:
         paths:
-          - path: /
+          - path: /api
             backend:
               serviceName: "REPLACEME_SERVICE"
               servicePort: 3000
