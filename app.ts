@@ -24,7 +24,7 @@ const sessionOptions: SessionOptions = {
     rolling: true,
     store: new RedisStore({client: redisClient})
 }
-if (app.get('env') !== 'development') {
+if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
     sessionOptions.cookie.secure = true;
 }
