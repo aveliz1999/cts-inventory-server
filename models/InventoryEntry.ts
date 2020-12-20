@@ -22,11 +22,31 @@ export default class InventoryEntry extends Model<InventoryEntry> {
 
     @AllowNull(false)
     @Column(DataType.STRING(16))
-    serial: string;
+    domain: string;
+
+    @AllowNull(false)
+    @Column(DataType.STRING(64))
+    brand: string
 
     @AllowNull(false)
     @Column(DataType.STRING(64))
     model: string;
+
+    @AllowNull(false)
+    @Column(DataType.STRING(16))
+    serial: string;
+
+    @AllowNull(false)
+    @Column(DataType.STRING(8))
+    windowsVersion: string;
+
+    @AllowNull(false)
+    @Column(DataType.STRING(16))
+    windowsBuild: string;
+
+    @AllowNull(false)
+    @Column(DataType.STRING(16))
+    windowsRelease: string;
 
     @AllowNull(false)
     @Column(DataType.STRING(64))
@@ -34,11 +54,19 @@ export default class InventoryEntry extends Model<InventoryEntry> {
 
     @AllowNull(false)
     @Column(DataType.INTEGER.UNSIGNED)
-    clockSpeed: string;
+    clockSpeed: number;
 
     @AllowNull(false)
     @Column(DataType.INTEGER.UNSIGNED)
-    ram: string;
+    cpuCores: number;
+
+    @AllowNull(false)
+    @Column(DataType.INTEGER.UNSIGNED)
+    ram: number;
+
+    @AllowNull(false)
+    @Column(DataType.FLOAT.UNSIGNED)
+    disk: number;
 
     @CreatedAt
     @AllowNull(false)
