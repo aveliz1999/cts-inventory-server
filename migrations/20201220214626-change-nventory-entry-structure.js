@@ -26,6 +26,10 @@ module.exports = {
             allowNull: false,
             type: Sequelize.INTEGER.UNSIGNED
         });
+        await queryInterface.addColumn('InventoryEntries', 'disk', {
+            allowNull: false,
+            type: Sequelize.FLOAT.UNSIGNED
+        });
     },
 
     down: async (queryInterface, Sequelize) => {
@@ -35,6 +39,6 @@ module.exports = {
         await queryInterface.removeColumn('InventoryEntries', 'windowsBuild');
         await queryInterface.removeColumn('InventoryEntries', 'windowsRelease');
         await queryInterface.removeColumn('InventoryEntries', 'cpuCores');
-
+        await queryInterface.removeColumn('InventoryEntries', 'disk');
     }
 };
