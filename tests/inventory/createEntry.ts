@@ -113,48 +113,97 @@ export default function (chai, app) {
                 });
             });
 
-            describe('Serial', function () {
-                it('Fails when serial is not present', async function () {
+            describe('Domain', function () {
+                it('Fails when domain is not present', async function () {
                     const {message}: { message: string } = (await agent
                         .post('/inventory')
                         .send({
                             room: '1234',
                             number: 1
                         })).body;
-                    assert.equal(message, "child \"serial\" fails because [\"serial\" is required]");
+                    assert.equal(message, "child \"domain\" fails because [\"domain\" is required]");
                 });
 
-                it('Fails when serial is not a string', async function () {
+                it('Fails when domain is not a string', async function () {
                     const {message}: { message: string } = (await agent
                         .post('/inventory')
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: 1
+                            domain: false
                         })).body;
-                    assert.equal(message, "child \"serial\" fails because [\"serial\" must be a string]");
+                    assert.equal(message, "child \"domain\" fails because [\"domain\" must be a string]");
                 });
 
-                it('Fails when serial is empty', async function () {
+                it('Fails when domain is empty', async function () {
                     const {message}: { message: string } = (await agent
                         .post('/inventory')
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: ''
+                            domain: ''
                         })).body;
-                    assert.equal(message, "child \"serial\" fails because [\"serial\" is not allowed to be empty]");
+                    assert.equal(message, "child \"domain\" fails because [\"domain\" is not allowed to be empty]");
                 });
 
-                it('Fails when serial is longer than 16 characters', async function () {
+                it('Fails when domain is longer than 16 characters', async function () {
                     const {message}: { message: string } = (await agent
                         .post('/inventory')
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: ''.padEnd(17, '0')
+                            domain: ''.padEnd(17, '0')
                         })).body;
-                    assert.equal(message, "child \"serial\" fails because [\"serial\" length must be less than or equal to 16 characters long]");
+                    assert.equal(message, "child \"domain\" fails because [\"domain\" length must be less than or equal to 16 characters long]");
+                });
+            });
+
+            describe('Brand', function () {
+                it('Fails when brand is not present', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234'
+                        })).body;
+                    assert.equal(message, "child \"brand\" fails because [\"brand\" is required]");
+                });
+
+                it('Fails when brand is not a string', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: 1
+                        })).body;
+                    assert.equal(message, "child \"brand\" fails because [\"brand\" must be a string]");
+                });
+
+                it('Fails when brand is empty', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: ''
+                        })).body;
+                    assert.equal(message, "child \"brand\" fails because [\"brand\" is not allowed to be empty]");
+                });
+
+                it('Fails when brand is longer than 64 characters', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: ''.padEnd(65, '0')
+                        })).body;
+                    assert.equal(message, "child \"brand\" fails because [\"brand\" length must be less than or equal to 64 characters long]");
                 });
             });
 
@@ -165,7 +214,8 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234'
+                            domain: '1234',
+                            brand: '1234'
                         })).body;
                     assert.equal(message, "child \"model\" fails because [\"model\" is required]");
                 });
@@ -176,7 +226,8 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: 1
                         })).body;
                     assert.equal(message, "child \"model\" fails because [\"model\" must be a string]");
@@ -188,7 +239,8 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: ''
                         })).body;
                     assert.equal(message, "child \"model\" fails because [\"model\" is not allowed to be empty]");
@@ -200,10 +252,263 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: ''.padEnd(65, '0')
                         })).body;
                     assert.equal(message, "child \"model\" fails because [\"model\" length must be less than or equal to 64 characters long]");
+                });
+            });
+
+            describe('Serial', function () {
+                it('Fails when serial is not present', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234'
+                        })).body;
+                    assert.equal(message, "child \"serial\" fails because [\"serial\" is required]");
+                });
+
+                it('Fails when serial is not a string', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: 1
+                        })).body;
+                    assert.equal(message, "child \"serial\" fails because [\"serial\" must be a string]");
+                });
+
+                it('Fails when serial is empty', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: ''
+                        })).body;
+                    assert.equal(message, "child \"serial\" fails because [\"serial\" is not allowed to be empty]");
+                });
+
+                it('Fails when serial is longer than 16 characters', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: ''.padEnd(17, '0')
+                        })).body;
+                    assert.equal(message, "child \"serial\" fails because [\"serial\" length must be less than or equal to 16 characters long]");
+                });
+            });
+
+            describe('Windows Version', function () {
+                it('Fails when windowsVersion is not present', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234'
+                        })).body;
+                    assert.equal(message, "child \"windowsVersion\" fails because [\"windowsVersion\" is required]");
+                });
+
+                it('Fails when windowsVersion is not a string', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: 1
+                        })).body;
+                    assert.equal(message, "child \"windowsVersion\" fails because [\"windowsVersion\" must be a string]");
+                });
+
+                it('Fails when windowsVersion is empty', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: ''
+                        })).body;
+                    assert.equal(message, "child \"windowsVersion\" fails because [\"windowsVersion\" is not allowed to be empty]");
+                });
+
+                it('Fails when windowsVersion is longer than 8 characters', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: ''.padEnd(9, '0')
+                        })).body;
+                    assert.equal(message, "child \"windowsVersion\" fails because [\"windowsVersion\" length must be less than or equal to 8 characters long]");
+                });
+            });
+
+            describe('Windows Build', function () {
+                it('Fails when windowsBuild is not present', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234'
+                        })).body;
+                    assert.equal(message, "child \"windowsBuild\" fails because [\"windowsBuild\" is required]");
+                });
+
+                it('Fails when windowsBuild is not a string', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: 1
+                        })).body;
+                    assert.equal(message, "child \"windowsBuild\" fails because [\"windowsBuild\" must be a string]");
+                });
+
+                it('Fails when windowsBuild is empty', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: ''
+                        })).body;
+                    assert.equal(message, "child \"windowsBuild\" fails because [\"windowsBuild\" is not allowed to be empty]");
+                });
+
+                it('Fails when windowsBuild is longer than 16 characters', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: ''.padEnd(17, '0')
+                        })).body;
+                    assert.equal(message, "child \"windowsBuild\" fails because [\"windowsBuild\" length must be less than or equal to 16 characters long]");
+                });
+            });
+
+            describe('Windows Release', function () {
+                it('Fails when windowsRelease is not present', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234'
+                        })).body;
+                    assert.equal(message, "child \"windowsRelease\" fails because [\"windowsRelease\" is required]");
+                });
+
+                it('Fails when windowsRelease is not a string', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: 1
+                        })).body;
+                    assert.equal(message, "child \"windowsRelease\" fails because [\"windowsRelease\" must be a string]");
+                });
+
+                it('Fails when windowsRelease is empty', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: ''
+                        })).body;
+                    assert.equal(message, "child \"windowsRelease\" fails because [\"windowsRelease\" is not allowed to be empty]");
+                });
+
+                it('Fails when windowsRelease is longer than 16 characters', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: ''.padEnd(17, '0')
+                        })).body;
+                    assert.equal(message, "child \"windowsRelease\" fails because [\"windowsRelease\" length must be less than or equal to 16 characters long]");
                 });
             });
 
@@ -214,8 +519,13 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
                             serial: '1234',
-                            model: '1234'
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234'
                         })).body;
                     assert.equal(message, "child \"cpu\" fails because [\"cpu\" is required]");
                 });
@@ -226,8 +536,13 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: 1
                         })).body;
                     assert.equal(message, "child \"cpu\" fails because [\"cpu\" must be a string]");
@@ -239,8 +554,13 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: ''
                         })).body;
                     assert.equal(message, "child \"cpu\" fails because [\"cpu\" is not allowed to be empty]");
@@ -252,8 +572,13 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: ''.padEnd(65, '0')
                         })).body;
                     assert.equal(message, "child \"cpu\" fails because [\"cpu\" length must be less than or equal to 64 characters long]");
@@ -267,8 +592,13 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: '1234'
                         })).body;
                     assert.equal(message, "child \"clockSpeed\" fails because [\"clockSpeed\" is required]");
@@ -280,8 +610,13 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: '1234',
                             clockSpeed: false
                         })).body;
@@ -294,8 +629,13 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: '1234',
                             clockSpeed: 0
                         })).body;
@@ -308,12 +648,98 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: '1234',
                             clockSpeed: 1.5
                         })).body;
                     assert.equal(message, "child \"clockSpeed\" fails because [\"clockSpeed\" must be an integer]");
+                });
+            });
+
+            describe('CPU Cores', function () {
+                it('Fails when cpuCores is not present', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
+                            cpu: '1234',
+                            clockSpeed: 1
+                        })).body;
+                    assert.equal(message, "child \"cpuCores\" fails because [\"cpuCores\" is required]");
+                });
+
+                it('Fails when cpuCores is not a number', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
+                            cpu: '1234',
+                            clockSpeed: 1,
+                            cpuCores: false
+                        })).body;
+                    assert.equal(message, "child \"cpuCores\" fails because [\"cpuCores\" must be a number]");
+                });
+
+                it('Fails when cpuCores is not positive', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
+                            cpu: '1234',
+                            clockSpeed: 1,
+                            cpuCores: 0
+                        })).body;
+                    assert.equal(message, "child \"cpuCores\" fails because [\"cpuCores\" must be a positive number]");
+                });
+
+                it('Fails when cpuCores is not an integer', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
+                            cpu: '1234',
+                            clockSpeed: 1,
+                            cpuCores: 1.5
+                        })).body;
+                    assert.equal(message, "child \"cpuCores\" fails because [\"cpuCores\" must be an integer]");
                 });
             });
 
@@ -324,10 +750,16 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: '1234',
-                            clockSpeed: 1234
+                            clockSpeed: 1,
+                            cpuCores: 1
                         })).body;
                     assert.equal(message, "child \"ram\" fails because [\"ram\" is required]");
                 });
@@ -338,10 +770,16 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: '1234',
-                            clockSpeed: 1234,
+                            clockSpeed: 1,
+                            cpuCores: 1,
                             ram: false
                         })).body;
                     assert.equal(message, "child \"ram\" fails because [\"ram\" must be a number]");
@@ -353,10 +791,16 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: '1234',
-                            clockSpeed: 1234,
+                            clockSpeed: 1,
+                            cpuCores: 1,
                             ram: 0
                         })).body;
                     assert.equal(message, "child \"ram\" fails because [\"ram\" must be a positive number]");
@@ -368,13 +812,86 @@ export default function (chai, app) {
                         .send({
                             room: '1234',
                             number: 1,
-                            serial: '1234',
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: '1234',
-                            clockSpeed: 1234,
+                            clockSpeed: 1,
+                            cpuCores: 1,
                             ram: 1.5
                         })).body;
                     assert.equal(message, "child \"ram\" fails because [\"ram\" must be an integer]");
+                });
+            });
+
+            describe('Disk', function () {
+                it('Fails when disk is not present', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
+                            cpu: '1234',
+                            clockSpeed: 1,
+                            cpuCores: 1,
+                            ram: 1
+                        })).body;
+                    assert.equal(message, "child \"disk\" fails because [\"disk\" is required]");
+                });
+
+                it('Fails when disk is not a number', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
+                            cpu: '1234',
+                            clockSpeed: 1,
+                            cpuCores: 1,
+                            ram: 1,
+                            disk: false
+                        })).body;
+                    assert.equal(message, "child \"disk\" fails because [\"disk\" must be a number]");
+                });
+
+                it('Fails when disk is not positive', async function () {
+                    const {message}: { message: string } = (await agent
+                        .post('/inventory')
+                        .send({
+                            room: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
+                            model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
+                            cpu: '1234',
+                            clockSpeed: 1,
+                            cpuCores: 1,
+                            ram: 1,
+                            disk: 0
+                        })).body;
+                    assert.equal(message, "child \"disk\" fails because [\"disk\" must be a positive number]");
                 });
             });
 
@@ -384,11 +901,18 @@ export default function (chai, app) {
                         id: number,
                         room: string,
                         number: number,
-                        serial: string,
+                        domain: string,
+                        brand: string,
                         model: string,
+                        serial: string,
+                        windowsVersion: string,
+                        windowsBuild: string,
+                        windowsRelease: string,
                         cpu: string,
                         clockSpeed: number,
+                        cpuCores: number,
                         ram: number,
+                        disk: number
                         updatedAt: string,
                         createdAt: string
                     } = (await agent
@@ -396,11 +920,18 @@ export default function (chai, app) {
                             .send({
                                 room: '1234',
                                 number: 1,
-                                serial: '1234',
+                                domain: '1234',
+                                brand: '1234',
                                 model: '1234',
+                                serial: '1234',
+                                windowsVersion: '1234',
+                                windowsBuild: '1234',
+                                windowsRelease: '1234',
                                 cpu: '1234',
-                                clockSpeed: 1234,
-                                ram: 1234
+                                clockSpeed: 1,
+                                cpuCores: 1,
+                                ram: 1,
+                                disk: 1
                             })
                     ).body;
 
@@ -415,11 +946,26 @@ export default function (chai, app) {
                     assert.exists(inventoryEntry.number);
                     assert.isNumber(inventoryEntry.number);
 
-                    assert.exists(inventoryEntry.serial);
-                    assert.isString(inventoryEntry.serial);
+                    assert.exists(inventoryEntry.domain);
+                    assert.isString(inventoryEntry.domain);
+
+                    assert.exists(inventoryEntry.brand);
+                    assert.isString(inventoryEntry.brand);
 
                     assert.exists(inventoryEntry.model);
                     assert.isString(inventoryEntry.model);
+
+                    assert.exists(inventoryEntry.serial);
+                    assert.isString(inventoryEntry.serial);
+
+                    assert.exists(inventoryEntry.windowsVersion);
+                    assert.isString(inventoryEntry.windowsVersion);
+
+                    assert.exists(inventoryEntry.windowsBuild);
+                    assert.isString(inventoryEntry.windowsBuild);
+
+                    assert.exists(inventoryEntry.windowsRelease);
+                    assert.isString(inventoryEntry.windowsRelease);
 
                     assert.exists(inventoryEntry.cpu);
                     assert.isString(inventoryEntry.cpu);
@@ -427,8 +973,14 @@ export default function (chai, app) {
                     assert.exists(inventoryEntry.clockSpeed);
                     assert.isNumber(inventoryEntry.clockSpeed);
 
+                    assert.exists(inventoryEntry.cpuCores);
+                    assert.isNumber(inventoryEntry.cpuCores);
+
                     assert.exists(inventoryEntry.ram);
                     assert.isNumber(inventoryEntry.ram);
+
+                    assert.exists(inventoryEntry.disk);
+                    assert.isNumber(inventoryEntry.disk);
 
                     assert.exists(inventoryEntry.createdAt);
                     assert.isString(inventoryEntry.createdAt);

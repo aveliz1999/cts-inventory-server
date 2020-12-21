@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import Joi, {ValidationError} from 'joi';
 import InventoryEntry from "../models/InventoryEntry";
 import {Op} from 'sequelize';
+import {AllowNull, Column, DataType} from "sequelize-typescript";
 
 
 export const createEntry = async function (req: Request, res: Response) {
@@ -14,13 +15,33 @@ export const createEntry = async function (req: Request, res: Response) {
             .integer()
             .positive()
             .required(),
-        serial: Joi.string()
+        domain: Joi.string()
             .min(1)
             .max(16)
+            .required(),
+        brand: Joi.string()
+            .min(1)
+            .max(64)
             .required(),
         model: Joi.string()
             .min(1)
             .max(64)
+            .required(),
+        serial: Joi.string()
+            .min(1)
+            .max(16)
+            .required(),
+        windowsVersion: Joi.string()
+            .min(1)
+            .max(8)
+            .required(),
+        windowsBuild: Joi.string()
+            .min(1)
+            .max(16)
+            .required(),
+        windowsRelease: Joi.string()
+            .min(1)
+            .max(16)
             .required(),
         cpu: Joi.string()
             .min(1)
@@ -30,15 +51,37 @@ export const createEntry = async function (req: Request, res: Response) {
             .integer()
             .positive()
             .required(),
+        cpuCores: Joi.number()
+            .integer()
+            .positive()
+            .required(),
         ram: Joi.number()
             .integer()
             .positive()
             .required(),
+        disk: Joi.number()
+            .positive()
+            .required()
     });
 
+
     try {
-        const data: { room: string, number: number, serial: string, model: string, cpu: string, clockSpeed: string, ram: string }
-            = await schema.validate(req.body);
+        const data: {
+            room: string,
+            number: number,
+            domain: string,
+            brand: string,
+            model: string,
+            serial: string,
+            windowsVersion: string,
+            windowsBuild: string,
+            windowsRelease: string,
+            cpu: string,
+            clockSpeed: number,
+            cpuCores: number,
+            ram: number,
+            disk: number
+        } = await schema.validate(req.body);
 
         const entry = await InventoryEntry.create(data);
         return res.status(201).send(entry);
@@ -80,6 +123,9 @@ export const getEntry = async function (req: Request, res: Response) {
 };
 
 export const search = async function (req: Request, res: Response) {
+    const operator = Joi.string()
+        .valid('=', '>', '>=', '<', '<=')
+        .optional();
     const schema = Joi.object({
         search: Joi.object({
             room: Joi.object({
@@ -87,68 +133,102 @@ export const search = async function (req: Request, res: Response) {
                     .min(1)
                     .max(16)
                     .required(),
-                operator: Joi.string()
-                    .valid('=', '>', '>=', '<', '<=')
-                    .optional()
+                operator
             }).optional(),
             number: Joi.object({
                 value: Joi.number()
                     .integer()
                     .positive()
                     .required(),
-                operator: Joi.string()
-                    .valid('=', '>', '>=', '<', '<=')
-                    .optional()
+                operator
             }).optional(),
-            serial: Joi.object({
+            domain: Joi.object({
                 value: Joi.string()
                     .min(1)
                     .max(16)
                     .required(),
-                operator: Joi.string()
-                    .valid('=', '>', '>=', '<', '<=')
-                    .optional()
+                operator
+            }),
+            brand: Joi.object({
+                value: Joi.string()
+                    .min(1)
+                    .max(64)
+                    .required(),
+                operator
             }).optional(),
             model: Joi.object({
                 value: Joi.string()
                     .min(1)
                     .max(64)
                     .required(),
-                operator: Joi.string()
-                    .valid('=', '>', '>=', '<', '<=')
-                    .optional()
+                operator
+            }).optional(),
+            serial: Joi.object({
+                value: Joi.string()
+                    .min(1)
+                    .max(16)
+                    .required(),
+                operator
+            }).optional(),
+            windowsVersion: Joi.object({
+                value: Joi.string()
+                    .min(1)
+                    .max(8)
+                    .required(),
+                operator
+            }).optional(),
+            windowsBuild: Joi.object({
+                value: Joi.string()
+                    .min(1)
+                    .max(16)
+                    .required(),
+                operator
+            }).optional(),
+            windowsRelease: Joi.object({
+                value: Joi.string()
+                    .min(1)
+                    .max(16)
+                    .required(),
+                operator
             }).optional(),
             cpu: Joi.object({
                 value: Joi.string()
                     .min(1)
                     .max(64)
                     .required(),
-                operator: Joi.string()
-                    .valid('=', '>', '>=', '<', '<=')
-                    .optional()
+                operator
             }).optional(),
             clockSpeed: Joi.object({
                 value: Joi.number()
                     .integer()
                     .positive()
                     .required(),
-                operator: Joi.string()
-                    .valid('=', '>', '>=', '<', '<=')
-                    .optional()
+                operator
+            }).optional(),
+            cpuCores: Joi.object({
+                value: Joi.number()
+                    .integer()
+                    .positive()
+                    .required(),
+                operator
             }).optional(),
             ram: Joi.object({
                 value: Joi.number()
                     .integer()
                     .positive()
                     .required(),
-                operator: Joi.string()
-                    .valid('=', '>', '>=', '<', '<=')
-                    .optional()
+                operator
+            }).optional(),
+            disk: Joi.object({
+                value: Joi.number()
+                    .positive()
+                    .required(),
+                operator
             }).optional()
         }).optional(),
         sort: Joi.object({
             key: Joi.string()
-                .valid('room', 'number', 'serial', 'model', 'cpu', 'clockSpeed', 'ram'),
+                .valid('room', 'number', 'domain', 'brand', 'model', 'serial', 'windowsVersion', 'windowsBuild', 'windowsRelease', 'cpu', 'clockSpeed', 'cpuCores', 'ram', 'disk'),
             direction: Joi.string()
                 .valid('ASC', 'DESC')
         }).optional(),
@@ -163,11 +243,18 @@ export const search = async function (req: Request, res: Response) {
             search: {
                 room: { value: string, operator: string | undefined } | undefined,
                 number: { value: number, operator: string | undefined } | undefined,
-                serial: { value: string, operator: string | undefined } | undefined,
+                domain: { value: string, operator: string | undefined } | undefined,
+                brand: { value: string, operator: string | undefined } | undefined,
                 model: { value: string, operator: string | undefined } | undefined,
+                serial: { value: string, operator: string | undefined } | undefined,
+                windowsVersion: { value: string, operator: string | undefined } | undefined,
+                windowsBuild: { value: string, operator: string | undefined } | undefined,
+                windowsRelease: { value: string, operator: string | undefined } | undefined,
                 cpu: { value: string, operator: string | undefined } | undefined,
                 clockSpeed: { value: number, operator: string | undefined } | undefined,
-                ram: { value: number, operator: string | undefined } | undefined
+                cpuCores: { value: number, operator: string | undefined } | undefined,
+                ram: { value: number, operator: string | undefined } | undefined,
+                disk: { value: number, operator: string | undefined } | undefined
             },
             sort: { key: string, direction: string } | undefined
             after: number | undefined

@@ -57,12 +57,19 @@ export default function (chai, app) {
                         .post('/inventory')
                         .send({
                             room: '1234',
-                            number: 1234,
-                            serial: '1234',
+                            number: 1,
+                            domain: '1234',
+                            brand: '1234',
                             model: '1234',
+                            serial: '1234',
+                            windowsVersion: '1234',
+                            windowsBuild: '1234',
+                            windowsRelease: '1234',
                             cpu: '1234',
-                            clockSpeed: 1234,
-                            ram: 1234,
+                            clockSpeed: 1,
+                            cpuCores: 1,
+                            ram: 1,
+                            disk: 1
                         })).body;
                     entryId = id;
                 });
@@ -72,11 +79,18 @@ export default function (chai, app) {
                         id: number,
                         room: string,
                         number: number,
-                        serial: string,
+                        domain: string,
+                        brand: string,
                         model: string,
+                        serial: string,
+                        windowsVersion: string,
+                        windowsBuild: string,
+                        windowsRelease: string,
                         cpu: string,
                         clockSpeed: number,
+                        cpuCores: number,
                         ram: number,
+                        disk: number
                         updatedAt: string,
                         createdAt: string
                     } = (await agent.get(`/inventory/${entryId}`)).body;
@@ -92,11 +106,26 @@ export default function (chai, app) {
                     assert.exists(inventoryEntry.number);
                     assert.isNumber(inventoryEntry.number);
 
-                    assert.exists(inventoryEntry.serial);
-                    assert.isString(inventoryEntry.serial);
+                    assert.exists(inventoryEntry.domain);
+                    assert.isString(inventoryEntry.domain);
+
+                    assert.exists(inventoryEntry.brand);
+                    assert.isString(inventoryEntry.brand);
 
                     assert.exists(inventoryEntry.model);
                     assert.isString(inventoryEntry.model);
+
+                    assert.exists(inventoryEntry.serial);
+                    assert.isString(inventoryEntry.serial);
+
+                    assert.exists(inventoryEntry.windowsVersion);
+                    assert.isString(inventoryEntry.windowsVersion);
+
+                    assert.exists(inventoryEntry.windowsBuild);
+                    assert.isString(inventoryEntry.windowsBuild);
+
+                    assert.exists(inventoryEntry.windowsRelease);
+                    assert.isString(inventoryEntry.windowsRelease);
 
                     assert.exists(inventoryEntry.cpu);
                     assert.isString(inventoryEntry.cpu);
@@ -104,8 +133,14 @@ export default function (chai, app) {
                     assert.exists(inventoryEntry.clockSpeed);
                     assert.isNumber(inventoryEntry.clockSpeed);
 
+                    assert.exists(inventoryEntry.cpuCores);
+                    assert.isNumber(inventoryEntry.cpuCores);
+
                     assert.exists(inventoryEntry.ram);
                     assert.isNumber(inventoryEntry.ram);
+
+                    assert.exists(inventoryEntry.disk);
+                    assert.isNumber(inventoryEntry.disk);
 
                     assert.exists(inventoryEntry.createdAt);
                     assert.isString(inventoryEntry.createdAt);

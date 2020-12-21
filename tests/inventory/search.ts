@@ -208,45 +208,45 @@ export default function (chai, app) {
                     });
                 });
 
-                describe('Serial', function () {
+                describe('Domain', function () {
                     describe('Value', function () {
-                        it('Fails when serial is not a string', async function () {
+                        it('Fails when domain is not a string', async function () {
                             const {message}: { message: string } = (await agent
                                 .post('/inventory/search')
                                 .send({
                                     search: {
-                                        serial: {
+                                        domain: {
                                             value: 1
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"serial\" fails because [child \"value\" fails because [\"value\" must be a string]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"domain\" fails because [child \"value\" fails because [\"value\" must be a string]]]");
                         });
 
-                        it('Fails when serial is empty', async function () {
+                        it('Fails when domain is empty', async function () {
                             const {message}: { message: string } = (await agent
                                 .post('/inventory/search')
                                 .send({
                                     search: {
-                                        serial: {
+                                        domain: {
                                             value: ''
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"serial\" fails because [child \"value\" fails because [\"value\" is not allowed to be empty]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"domain\" fails because [child \"value\" fails because [\"value\" is not allowed to be empty]]]");
                         });
 
-                        it('Fails when serial is longer than 16 characters', async function () {
+                        it('Fails when domain is longer than 16 characters', async function () {
                             const {message}: { message: string } = (await agent
                                 .post('/inventory/search')
                                 .send({
                                     search: {
-                                        serial: {
+                                        domain: {
                                             value: ''.padEnd(17, '0')
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"serial\" fails because [child \"value\" fails because [\"value\" length must be less than or equal to 16 characters long]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"domain\" fails because [child \"value\" fails because [\"value\" length must be less than or equal to 16 characters long]]]");
                         });
                     });
 
@@ -256,13 +256,13 @@ export default function (chai, app) {
                                 .post('/inventory/search')
                                 .send({
                                     search: {
-                                        serial: {
+                                        domain: {
                                             value: '1234',
                                             operator: 1
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"serial\" fails because [child \"operator\" fails because [\"operator\" must be a string]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"domain\" fails because [child \"operator\" fails because [\"operator\" must be a string]]]");
                         });
 
                         it('Fails when operator is not an allowed type', async function () {
@@ -270,13 +270,86 @@ export default function (chai, app) {
                                 .post('/inventory/search')
                                 .send({
                                     search: {
-                                        serial: {
+                                        domain: {
                                             value: '1234',
                                             operator: "a"
                                         }
                                     }
                                 })).body;
-                            assert.equal(message, "child \"search\" fails because [child \"serial\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
+                            assert.equal(message, "child \"search\" fails because [child \"domain\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
+                        });
+                    });
+                });
+
+                describe('Brand', function () {
+                    describe('Value', function () {
+                        it('Fails when brand is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        brand: {
+                                            value: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"brand\" fails because [child \"value\" fails because [\"value\" must be a string]]]");
+                        });
+
+                        it('Fails when brand is empty', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        brand: {
+                                            value: ''
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"brand\" fails because [child \"value\" fails because [\"value\" is not allowed to be empty]]]");
+                        });
+
+                        it('Fails when brand is longer than 64 characters', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        brand: {
+                                            value: ''.padEnd(65, '0')
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"brand\" fails because [child \"value\" fails because [\"value\" length must be less than or equal to 64 characters long]]]");
+                        });
+                    });
+
+                    describe('Operator', function () {
+                        it('Fails when operator is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        brand: {
+                                            value: '1234',
+                                            operator: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"brand\" fails because [child \"operator\" fails because [\"operator\" must be a string]]]");
+                        });
+
+                        it('Fails when operator is not an allowed type', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        brand: {
+                                            value: '1234',
+                                            operator: "a"
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"brand\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
                         });
                     });
                 });
@@ -350,6 +423,298 @@ export default function (chai, app) {
                                     }
                                 })).body;
                             assert.equal(message, "child \"search\" fails because [child \"model\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
+                        });
+                    });
+                });
+
+                describe('Serial', function () {
+                    describe('Value', function () {
+                        it('Fails when serial is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        serial: {
+                                            value: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"serial\" fails because [child \"value\" fails because [\"value\" must be a string]]]");
+                        });
+
+                        it('Fails when serial is empty', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        serial: {
+                                            value: ''
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"serial\" fails because [child \"value\" fails because [\"value\" is not allowed to be empty]]]");
+                        });
+
+                        it('Fails when serial is longer than 16 characters', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        serial: {
+                                            value: ''.padEnd(17, '0')
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"serial\" fails because [child \"value\" fails because [\"value\" length must be less than or equal to 16 characters long]]]");
+                        });
+                    });
+
+                    describe('Operator', function () {
+                        it('Fails when operator is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        serial: {
+                                            value: '1234',
+                                            operator: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"serial\" fails because [child \"operator\" fails because [\"operator\" must be a string]]]");
+                        });
+
+                        it('Fails when operator is not an allowed type', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        serial: {
+                                            value: '1234',
+                                            operator: "a"
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"serial\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
+                        });
+                    });
+                });
+
+                describe('Windows Version', function () {
+                    describe('Value', function () {
+                        it('Fails when windowsVersion is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsVersion: {
+                                            value: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsVersion\" fails because [child \"value\" fails because [\"value\" must be a string]]]");
+                        });
+
+                        it('Fails when windowsVersion is empty', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsVersion: {
+                                            value: ''
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsVersion\" fails because [child \"value\" fails because [\"value\" is not allowed to be empty]]]");
+                        });
+
+                        it('Fails when windowsVersion is longer than 8 characters', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsVersion: {
+                                            value: ''.padEnd(9, '0')
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsVersion\" fails because [child \"value\" fails because [\"value\" length must be less than or equal to 8 characters long]]]");
+                        });
+                    });
+
+                    describe('Operator', function () {
+                        it('Fails when operator is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsVersion: {
+                                            value: '1234',
+                                            operator: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsVersion\" fails because [child \"operator\" fails because [\"operator\" must be a string]]]");
+                        });
+
+                        it('Fails when operator is not an allowed type', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsVersion: {
+                                            value: '1234',
+                                            operator: "a"
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsVersion\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
+                        });
+                    });
+                });
+
+                describe('Windows Build', function () {
+                    describe('Value', function () {
+                        it('Fails when windowsBuild is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsBuild: {
+                                            value: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsBuild\" fails because [child \"value\" fails because [\"value\" must be a string]]]");
+                        });
+
+                        it('Fails when windowsBuild is empty', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsBuild: {
+                                            value: ''
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsBuild\" fails because [child \"value\" fails because [\"value\" is not allowed to be empty]]]");
+                        });
+
+                        it('Fails when windowsBuild is longer than 16 characters', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsBuild: {
+                                            value: ''.padEnd(17, '0')
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsBuild\" fails because [child \"value\" fails because [\"value\" length must be less than or equal to 16 characters long]]]");
+                        });
+                    });
+
+                    describe('Operator', function () {
+                        it('Fails when operator is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsBuild: {
+                                            value: '1234',
+                                            operator: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsBuild\" fails because [child \"operator\" fails because [\"operator\" must be a string]]]");
+                        });
+
+                        it('Fails when operator is not an allowed type', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsBuild: {
+                                            value: '1234',
+                                            operator: "a"
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsBuild\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
+                        });
+                    });
+                });
+
+                describe('Windows Release', function () {
+                    describe('Value', function () {
+                        it('Fails when windowsRelease is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsRelease: {
+                                            value: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsRelease\" fails because [child \"value\" fails because [\"value\" must be a string]]]");
+                        });
+
+                        it('Fails when windowsRelease is empty', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsRelease: {
+                                            value: ''
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsRelease\" fails because [child \"value\" fails because [\"value\" is not allowed to be empty]]]");
+                        });
+
+                        it('Fails when windowsRelease is longer than 16 characters', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsRelease: {
+                                            value: ''.padEnd(17, '0')
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsRelease\" fails because [child \"value\" fails because [\"value\" length must be less than or equal to 16 characters long]]]");
+                        });
+                    });
+
+                    describe('Operator', function () {
+                        it('Fails when operator is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsRelease: {
+                                            value: '1234',
+                                            operator: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsRelease\" fails because [child \"operator\" fails because [\"operator\" must be a string]]]");
+                        });
+
+                        it('Fails when operator is not an allowed type', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        windowsRelease: {
+                                            value: '1234',
+                                            operator: "a"
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"windowsRelease\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
                         });
                     });
                 });
@@ -500,6 +865,79 @@ export default function (chai, app) {
                     });
                 });
 
+                describe('CPU Cores', function () {
+                    describe('Value', function () {
+                        it('Fails when cpuCores is not a number', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        cpuCores: {
+                                            value: ''
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"cpuCores\" fails because [child \"value\" fails because [\"value\" must be a number]]]");
+                        });
+
+                        it('Fails when cpuCores is not positive', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        cpuCores: {
+                                            value: 0
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"cpuCores\" fails because [child \"value\" fails because [\"value\" must be a positive number]]]");
+                        });
+
+                        it('Fails when cpuCores is not an integer', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        cpuCores: {
+                                            value: 1.5
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"cpuCores\" fails because [child \"value\" fails because [\"value\" must be an integer]]]");
+                        });
+                    });
+
+                    describe('Operator', function () {
+                        it('Fails when operator is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        cpuCores: {
+                                            value: 1,
+                                            operator: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"cpuCores\" fails because [child \"operator\" fails because [\"operator\" must be a string]]]");
+                        });
+
+                        it('Fails when operator is not an allowed type', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        cpuCores: {
+                                            value: 1,
+                                            operator: "a"
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"cpuCores\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
+                        });
+                    });
+                });
+
                 describe('RAM', function () {
                     describe('Value', function () {
                         it('Fails when ram is not a number', async function () {
@@ -572,6 +1010,66 @@ export default function (chai, app) {
                         });
                     });
                 });
+
+                describe('Disk', function () {
+                    describe('Value', function () {
+                        it('Fails when disk is not a number', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        disk: {
+                                            value: ''
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"disk\" fails because [child \"value\" fails because [\"value\" must be a number]]]");
+                        });
+
+                        it('Fails when disk is not positive', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        disk: {
+                                            value: 0
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"disk\" fails because [child \"value\" fails because [\"value\" must be a positive number]]]");
+                        });
+                    });
+
+                    describe('Operator', function () {
+                        it('Fails when operator is not a string', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        disk: {
+                                            value: 1,
+                                            operator: 1
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"disk\" fails because [child \"operator\" fails because [\"operator\" must be a string]]]");
+                        });
+
+                        it('Fails when operator is not an allowed type', async function () {
+                            const {message}: { message: string } = (await agent
+                                .post('/inventory/search')
+                                .send({
+                                    search: {
+                                        disk: {
+                                            value: 1,
+                                            operator: "a"
+                                        }
+                                    }
+                                })).body;
+                            assert.equal(message, "child \"search\" fails because [child \"disk\" fails because [child \"operator\" fails because [\"operator\" must be one of [=, >, >=, <, <=]]]]");
+                        });
+                    });
+                });
             });
 
             describe('Valid Data', function () {
@@ -583,11 +1081,18 @@ export default function (chai, app) {
                             return {
                                 room: `${number}`,
                                 number,
-                                serial: `${number}`,
+                                domain: `${number}`,
+                                brand: `${number}`,
                                 model: `${number}`,
+                                serial: `${number}`,
+                                windowsVersion: `${number}`,
+                                windowsBuild: `${number}`,
+                                windowsRelease: `${number}`,
                                 cpu: `${number}`,
-                                clockSpeed: number + 1, // clockSpeed can't be 0
-                                ram: number + 1 // ram can't be 0
+                                clockSpeed: number + 1,
+                                cpuCores: number + 1,
+                                ram: number + 1,
+                                disk: number + 1
                             }
                         })
                     );
@@ -895,14 +1400,14 @@ export default function (chai, app) {
                     });
                 });
 
-                describe('Serial', function () {
+                describe('Domain', function () {
                     it('= filter works', async function () {
                         for (let index = 0; index < entries.length; index++) {
                             const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
                                 after: entries[0].id - 1,
                                 search: {
-                                    serial: {
-                                        value: entries[index].serial,
+                                    domain: {
+                                        value: entries[index].domain,
                                         operator: '='
                                     }
                                 }
@@ -924,8 +1429,8 @@ export default function (chai, app) {
                             const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
                                 after: entries[0].id - 1,
                                 search: {
-                                    serial: {
-                                        value: entries[index].serial,
+                                    domain: {
+                                        value: entries[index].domain,
                                         operator: '>'
                                     }
                                 }
@@ -948,8 +1453,8 @@ export default function (chai, app) {
                             const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
                                 after: entries[0].id - 1,
                                 search: {
-                                    serial: {
-                                        value: entries[index].serial,
+                                    domain: {
+                                        value: entries[index].domain,
                                         operator: '>='
                                     }
                                 }
@@ -972,8 +1477,8 @@ export default function (chai, app) {
                             const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
                                 after: entries[0].id - 1,
                                 search: {
-                                    serial: {
-                                        value: entries[index].serial,
+                                    domain: {
+                                        value: entries[index].domain,
                                         operator: '<'
                                     }
                                 }
@@ -996,8 +1501,8 @@ export default function (chai, app) {
                             const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
                                 after: entries[0].id - 1,
                                 search: {
-                                    serial: {
-                                        value: entries[index].serial,
+                                    domain: {
+                                        value: entries[index].domain,
                                         operator: '<='
                                     }
                                 }
@@ -1020,8 +1525,151 @@ export default function (chai, app) {
                             const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
                                 after: entries[0].id - 1,
                                 search: {
-                                    serial: {
-                                        value: entries[index].serial
+                                    domain: {
+                                        value: entries[index].domain
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+                });
+
+                describe('Brand', function () {
+                    it('= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    brand: {
+                                        value: entries[index].brand,
+                                        operator: '='
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+
+                    it('> filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    brand: {
+                                        value: entries[index].brand,
+                                        operator: '>'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i + 1].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('>= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    brand: {
+                                        value: entries[index].brand,
+                                        operator: '>='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('< filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    brand: {
+                                        value: entries[index].brand,
+                                        operator: '<'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('<= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    brand: {
+                                        value: entries[index].brand,
+                                        operator: '<='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('Non-specified filter defaults to =', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    brand: {
+                                        value: entries[index].brand
                                     }
                                 }
                             })).body;
@@ -1165,6 +1813,578 @@ export default function (chai, app) {
                                 search: {
                                     model: {
                                         value: entries[index].model
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+                });
+
+                describe('Serial', function () {
+                    it('= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    serial: {
+                                        value: entries[index].serial,
+                                        operator: '='
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+
+                    it('> filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    serial: {
+                                        value: entries[index].serial,
+                                        operator: '>'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i + 1].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('>= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    serial: {
+                                        value: entries[index].serial,
+                                        operator: '>='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('< filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    serial: {
+                                        value: entries[index].serial,
+                                        operator: '<'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('<= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    serial: {
+                                        value: entries[index].serial,
+                                        operator: '<='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('Non-specified filter defaults to =', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    serial: {
+                                        value: entries[index].serial
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+                });
+
+                describe('Windows Version', function () {
+                    it('= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsVersion: {
+                                        value: entries[index].windowsVersion,
+                                        operator: '='
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+
+                    it('> filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsVersion: {
+                                        value: entries[index].windowsVersion,
+                                        operator: '>'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i + 1].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('>= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsVersion: {
+                                        value: entries[index].windowsVersion,
+                                        operator: '>='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('< filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsVersion: {
+                                        value: entries[index].windowsVersion,
+                                        operator: '<'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('<= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsVersion: {
+                                        value: entries[index].windowsVersion,
+                                        operator: '<='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('Non-specified filter defaults to =', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsVersion: {
+                                        value: entries[index].windowsVersion
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+                });
+
+                describe('Windows Build', function () {
+                    it('= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsBuild: {
+                                        value: entries[index].windowsBuild,
+                                        operator: '='
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+
+                    it('> filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsBuild: {
+                                        value: entries[index].windowsBuild,
+                                        operator: '>'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i + 1].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('>= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsBuild: {
+                                        value: entries[index].windowsBuild,
+                                        operator: '>='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('< filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsBuild: {
+                                        value: entries[index].windowsBuild,
+                                        operator: '<'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('<= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsBuild: {
+                                        value: entries[index].windowsBuild,
+                                        operator: '<='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('Non-specified filter defaults to =', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsBuild: {
+                                        value: entries[index].windowsBuild
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+                });
+
+                describe('Windows Release', function () {
+                    it('= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsRelease: {
+                                        value: entries[index].windowsRelease,
+                                        operator: '='
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+
+                    it('> filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsRelease: {
+                                        value: entries[index].windowsRelease,
+                                        operator: '>'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i + 1].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('>= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsRelease: {
+                                        value: entries[index].windowsRelease,
+                                        operator: '>='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('< filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsRelease: {
+                                        value: entries[index].windowsRelease,
+                                        operator: '<'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('<= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsRelease: {
+                                        value: entries[index].windowsRelease,
+                                        operator: '<='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('Non-specified filter defaults to =', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    windowsRelease: {
+                                        value: entries[index].windowsRelease
                                     }
                                 }
                             })).body;
@@ -1336,7 +2556,6 @@ export default function (chai, app) {
                                     }
                                 }
                             })).body;
-                            console.log(entries[index].clockSpeed);
                             const entry = returnedEntries[0];
                             assert.exists(entry);
 
@@ -1344,7 +2563,6 @@ export default function (chai, app) {
                                 if (property[1] instanceof Date) {
                                     assert.equal(entry[property[0]], property[1].toISOString());
                                 } else {
-                                    console.log(property[0], property[1], entry)
                                     assert.equal(entry[property[0]], property[1]);
                                 }
                             }
@@ -1454,6 +2672,150 @@ export default function (chai, app) {
                                 search: {
                                     clockSpeed: {
                                         value: entries[index].clockSpeed
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+                });
+
+                describe('CPU Cores', function () {
+                    it('= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    cpuCores: {
+                                        value: entries[index].cpuCores,
+                                        operator: '='
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+                            assert.exists(entry);
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+
+                    it('> filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    cpuCores: {
+                                        value: entries[index].cpuCores,
+                                        operator: '>'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i + 1].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('>= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    cpuCores: {
+                                        value: entries[index].cpuCores,
+                                        operator: '>='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('< filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    cpuCores: {
+                                        value: entries[index].cpuCores,
+                                        operator: '<'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('<= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    cpuCores: {
+                                        value: entries[index].cpuCores,
+                                        operator: '<='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('Non-specified filter defaults to =', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    cpuCores: {
+                                        value: entries[index].cpuCores
                                     }
                                 }
                             })).body;
@@ -1597,6 +2959,149 @@ export default function (chai, app) {
                                 search: {
                                     ram: {
                                         value: entries[index].ram
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+                });
+
+                describe('Disk', function () {
+                    it('= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    disk: {
+                                        value: entries[index].disk,
+                                        operator: '='
+                                    }
+                                }
+                            })).body;
+                            const entry = returnedEntries[0];
+
+                            for (let property of Object.entries(entries[index].dataValues)) {
+                                if (property[1] instanceof Date) {
+                                    assert.equal(entry[property[0]], property[1].toISOString());
+                                } else {
+                                    assert.equal(entry[property[0]], property[1]);
+                                }
+                            }
+                        }
+                    });
+
+                    it('> filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    disk: {
+                                        value: entries[index].disk,
+                                        operator: '>'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i + 1].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('>= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    disk: {
+                                        value: entries[index].disk,
+                                        operator: '>='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[index + i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('< filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    disk: {
+                                        value: entries[index].disk,
+                                        operator: '<'
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('<= filter works', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    disk: {
+                                        value: entries[index].disk,
+                                        operator: '<='
+                                    }
+                                }
+                            })).body;
+                            for (let i = 0; i < returnedEntries.length; i++) {
+                                const entry = returnedEntries[i];
+                                for (let property of Object.entries(entries[i].dataValues)) {
+                                    if (property[1] instanceof Date) {
+                                        assert.equal(entry[property[0]], property[1].toISOString());
+                                    } else {
+                                        assert.equal(entry[property[0]], property[1]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    it('Non-specified filter defaults to =', async function () {
+                        for (let index = 0; index < entries.length; index++) {
+                            const returnedEntries: InventoryEntry[] = (await agent.post('/inventory/search').send({
+                                after: entries[0].id - 1,
+                                search: {
+                                    disk: {
+                                        value: entries[index].disk
                                     }
                                 }
                             })).body;
