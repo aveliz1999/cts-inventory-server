@@ -50,6 +50,16 @@ export const createUser = async function (req: Request, res: Response) {
 }
 
 export const login = async function (req: Request, res: Response) {
+    if (req.session.user) {
+        const user = await User.findOne({
+            where: {
+                id: req.session.user
+            }
+        });
+        return res.status(200).send(user);
+    }
+
+
     const schema = Joi.object({
         username: Joi.string()
             .min(1)
@@ -68,7 +78,11 @@ export const login = async function (req: Request, res: Response) {
     });
 
     try {
-        const {username, password, newPassword}: { username: string, password: string, newPassword: string | undefined } = await schema.validate(req.body);
+        const {
+            username,
+            password,
+            newPassword
+        }: { username: string, password: string, newPassword: string | undefined } = await schema.validate(req.body);
 
         const user: User = await User.scope('withPassword').findOne({
             where: {
