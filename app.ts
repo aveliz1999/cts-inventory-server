@@ -41,9 +41,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 import usersRoute from './routes/users';
 import inventoryRoute from './routes/inventory';
+import qrRoute from './routes/qr';
 
 app.use('/users', usersRoute);
 app.use('/inventory', inventoryRoute);
+app.use('/qr', qrRoute);
 
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError) {
