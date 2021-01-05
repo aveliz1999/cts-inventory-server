@@ -56,6 +56,7 @@ export const create = async function (req: Request, res: Response) {
             .positive()
             .required(),
         disk: Joi.number()
+            .integer()
             .positive()
             .required()
     });
