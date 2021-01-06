@@ -4,7 +4,6 @@ import InventoryEntry from "../models/InventoryEntry";
 import {Op} from 'sequelize';
 import {AllowNull, Column, DataType} from "sequelize-typescript";
 
-
 export const createEntry = async function (req: Request, res: Response) {
     const schema = Joi.object({
         room: Joi.string()
@@ -60,6 +59,7 @@ export const createEntry = async function (req: Request, res: Response) {
             .positive()
             .required(),
         disk: Joi.number()
+            .integer()
             .positive()
             .required()
     });
@@ -83,13 +83,37 @@ export const createEntry = async function (req: Request, res: Response) {
             disk: number
         } = await schema.validate(req.body);
 
-        const entry = await InventoryEntry.create(data);
-        return res.status(201).send(entry);
+        const existing = await InventoryEntry.findOne({
+            where: {
+                number: data.number
+            }
+        });
+        if(existing) {
+            let changes = "";
+            for(let field of ["room", "number", "domain", "brand", "model", "serial", "windowsVersion", "windowsBuild", "windowsRelease", "cpu", "clockSpeed", "cpuCores", "ram", "disk"]) {
+                if(existing[field] !== data[field]) {
+                    changes += `${field} was updated from ${existing[field]} to ${data[field]}.\n`;
+                }
+            }
+            if(!changes) {
+                changes = "No changes were made.";
+            }
+            else {
+                await existing.update(data);
+            }
+
+            return res.status(200).send({message: changes});
+        }
+        else {
+            const entry = await InventoryEntry.create(data);
+            return res.status(201).send(entry);
+        }
 
     } catch (err) {
         if (err.isJoi) {
             return res.status(400).send({message: (err as ValidationError).message});
         }
+        console.error(err);
         return res.status(500).send({message: 'An error has occurred on the server.'})
     }
 };
