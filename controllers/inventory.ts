@@ -150,106 +150,117 @@ export const search = async function (req: Request, res: Response) {
     const operator = Joi.string()
         .valid('=', '>', '>=', '<', '<=')
         .optional();
+
+    const searchFields = {
+        room: Joi.object({
+            value: Joi.string()
+                .min(1)
+                .max(16)
+                .required(),
+            operator
+        }),
+        number: Joi.object({
+            value: Joi.number()
+                .integer()
+                .positive()
+                .required(),
+            operator
+        }),
+        domain: Joi.object({
+            value: Joi.string()
+                .min(1)
+                .max(16)
+                .required(),
+            operator
+        }),
+        brand: Joi.object({
+            value: Joi.string()
+                .min(1)
+                .max(64)
+                .required(),
+            operator
+        }),
+        model: Joi.object({
+            value: Joi.string()
+                .min(1)
+                .max(64)
+                .required(),
+            operator
+        }),
+        serial: Joi.object({
+            value: Joi.string()
+                .min(1)
+                .max(16)
+                .required(),
+            operator
+        }),
+        windowsVersion: Joi.object({
+            value: Joi.string()
+                .min(1)
+                .max(8)
+                .required(),
+            operator
+        }),
+        windowsBuild: Joi.object({
+            value: Joi.string()
+                .min(1)
+                .max(16)
+                .required(),
+            operator
+        }),
+        windowsRelease: Joi.object({
+            value: Joi.string()
+                .min(1)
+                .max(16)
+                .required(),
+            operator
+        }),
+        cpu: Joi.object({
+            value: Joi.string()
+                .min(1)
+                .max(64)
+                .required(),
+            operator
+        }),
+        clockSpeed: Joi.object({
+            value: Joi.number()
+                .integer()
+                .positive()
+                .required(),
+            operator
+        }),
+        cpuCores: Joi.object({
+            value: Joi.number()
+                .integer()
+                .positive()
+                .required(),
+            operator
+        }),
+        ram: Joi.object({
+            value: Joi.number()
+                .integer()
+                .positive()
+                .required(),
+            operator
+        }),
+        disk: Joi.object({
+            value: Joi.number()
+                .positive()
+                .required(),
+            operator
+        })
+    }
+
     const schema = Joi.object({
-        search: Joi.object({
-            room: Joi.object({
-                value: Joi.string()
-                    .min(1)
-                    .max(16)
-                    .required(),
-                operator
-            }).optional(),
-            number: Joi.object({
-                value: Joi.number()
-                    .integer()
-                    .positive()
-                    .required(),
-                operator
-            }).optional(),
-            domain: Joi.object({
-                value: Joi.string()
-                    .min(1)
-                    .max(16)
-                    .required(),
-                operator
-            }),
-            brand: Joi.object({
-                value: Joi.string()
-                    .min(1)
-                    .max(64)
-                    .required(),
-                operator
-            }).optional(),
-            model: Joi.object({
-                value: Joi.string()
-                    .min(1)
-                    .max(64)
-                    .required(),
-                operator
-            }).optional(),
-            serial: Joi.object({
-                value: Joi.string()
-                    .min(1)
-                    .max(16)
-                    .required(),
-                operator
-            }).optional(),
-            windowsVersion: Joi.object({
-                value: Joi.string()
-                    .min(1)
-                    .max(8)
-                    .required(),
-                operator
-            }).optional(),
-            windowsBuild: Joi.object({
-                value: Joi.string()
-                    .min(1)
-                    .max(16)
-                    .required(),
-                operator
-            }).optional(),
-            windowsRelease: Joi.object({
-                value: Joi.string()
-                    .min(1)
-                    .max(16)
-                    .required(),
-                operator
-            }).optional(),
-            cpu: Joi.object({
-                value: Joi.string()
-                    .min(1)
-                    .max(64)
-                    .required(),
-                operator
-            }).optional(),
-            clockSpeed: Joi.object({
-                value: Joi.number()
-                    .integer()
-                    .positive()
-                    .required(),
-                operator
-            }).optional(),
-            cpuCores: Joi.object({
-                value: Joi.number()
-                    .integer()
-                    .positive()
-                    .required(),
-                operator
-            }).optional(),
-            ram: Joi.object({
-                value: Joi.number()
-                    .integer()
-                    .positive()
-                    .required(),
-                operator
-            }).optional(),
-            disk: Joi.object({
-                value: Joi.number()
-                    .positive()
-                    .required(),
-                operator
-            }).optional()
-        }).optional(),
+        search: Joi.array()
+            .items([
+                {
+                    key: Joi.string()
+                        .valid('room', 'number', 'domain', 'brand', 'model', 'serial', 'windowsVersion', 'windowsBuild', 'windowsRelease', 'cpu', 'clockSpeed', 'cpuCores', 'ram', 'disk')
+                        .required(),
+                    value: Joi.any().required()
+                }
+            ]).optional(),
         sort: Joi.object({
             key: Joi.string()
                 .valid('room', 'number', 'domain', 'brand', 'model', 'serial', 'windowsVersion', 'windowsBuild', 'windowsRelease', 'cpu', 'clockSpeed', 'cpuCores', 'ram', 'disk'),
@@ -263,68 +274,66 @@ export const search = async function (req: Request, res: Response) {
     });
 
     try {
-        const input: {
-            search: {
-                room: { value: string, operator: string | undefined } | undefined,
-                number: { value: number, operator: string | undefined } | undefined,
-                domain: { value: string, operator: string | undefined } | undefined,
-                brand: { value: string, operator: string | undefined } | undefined,
-                model: { value: string, operator: string | undefined } | undefined,
-                serial: { value: string, operator: string | undefined } | undefined,
-                windowsVersion: { value: string, operator: string | undefined } | undefined,
-                windowsBuild: { value: string, operator: string | undefined } | undefined,
-                windowsRelease: { value: string, operator: string | undefined } | undefined,
-                cpu: { value: string, operator: string | undefined } | undefined,
-                clockSpeed: { value: number, operator: string | undefined } | undefined,
-                cpuCores: { value: number, operator: string | undefined } | undefined,
-                ram: { value: number, operator: string | undefined } | undefined,
-                disk: { value: number, operator: string | undefined } | undefined
-            },
-            sort: { key: string, direction: string } | undefined
-            after: number | undefined
+        const {search, sort, after}: {
+            search?: {
+                key: string,
+                value: any
+            }[],
+            sort?: { key: string, direction: string },
+            after?: number
         } = await schema.validate(req.body);
+        const searchTerms: {
+            term: string,
+            value: any,
+            operator: string
+        }[] = [];
+        if(search) {
+            for(let term of search) {
+                const value = await searchFields[term.key].validate(term.value);
+                value.term = term.key;
+                searchTerms.push(value);
+            }
+        }
 
-        const flat = {...input.search, after: input.after};
-        if (!Object.values(flat).length) {
+        if (!sort && !after && !searchTerms.length) {
             return res.send(await InventoryEntry.findAll({
                 limit: 25
             }));
         }
 
-        const searchQuery = (Object.entries(input.search || []) as [string, { value: string | number, operator: string | undefined }][])
-            .filter(field => field)
-            .map(([label, data]) => {
-                let op;
-                switch (data.operator) {
-                    case '>':
-                        op = Op.gt;
-                        break;
-                    case '>=':
-                        op = Op.gte;
-                        break;
-                    case '<':
-                        op = Op.lt;
-                        break;
-                    case '<=':
-                        op = Op.lte;
-                        break;
-                    default:
-                        op = Op.eq;
-                        break;
+        const searchQuery = searchTerms.map(data => {
+            let op;
+            switch (data.operator) {
+                case '>':
+                    op = Op.gt;
+                    break;
+                case '>=':
+                    op = Op.gte;
+                    break;
+                case '<':
+                    op = Op.lt;
+                    break;
+                case '<=':
+                    op = Op.lte;
+                    break;
+                default:
+                    op = Op.eq;
+                    break;
+            }
+            return {
+                [data.term]: {
+                    [op]: data.value
                 }
-                return {
-                    [label]: {
-                        [op]: data.value
-                    }
-                }
-            });
+            }
+        })
+
         let query;
         if (searchQuery.length) {
             query = {
                 where: {
                     [Op.and]: {
                         id: {
-                            [Op.gt]: input.after || 0
+                            [Op.gt]: after || 0
                         },
                         [Op.and]: searchQuery
                     }
@@ -335,14 +344,14 @@ export const search = async function (req: Request, res: Response) {
             query = {
                 where: {
                     id: {
-                        [Op.gt]: input.after || 0
+                        [Op.gt]: after || 0
                     }
                 },
                 limit: 25
             }
         }
-        if (input.sort) {
-            query.order = [[input.sort.key, input.sort.direction]]
+        if (sort) {
+            query.order = [[sort.key, sort.direction]]
         }
 
         const results = await InventoryEntry.findAll(query);
